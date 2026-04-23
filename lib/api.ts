@@ -66,6 +66,10 @@ export const visitsApi = {
         body: JSON.stringify(visitDetails),
     }),
     getQueuedVisits: (status: string) => apiRequest(`/visits/status/${status}`),
+    updateStatus: (id: number, status: string) => apiRequest(`/visits/${id}/status`, {
+        method: 'PUT',
+        body: JSON.stringify(status),
+    }),
 };
 
 export const recordsApi = {
@@ -73,6 +77,7 @@ export const recordsApi = {
         method: 'POST',
         body: JSON.stringify(payload),
     }),
+    getRecordForVisit: (visitId: number) => apiRequest(`/medical-records/visit/${visitId}`),
 };
 
 export const analyticsApi = {

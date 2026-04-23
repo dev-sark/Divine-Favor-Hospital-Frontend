@@ -94,6 +94,7 @@ export default function RegisterStaffPage() {
                                 >
                                     <option value="DOCTOR">Doctor</option>
                                     <option value="NURSE">Nurse</option>
+                                    <option value="PHARMACIST">Pharmacist</option>
                                     <option value="RECEPTIONIST">Receptionist</option>
                                     <option value="ADMIN">System Administrator</option>
                                 </select>

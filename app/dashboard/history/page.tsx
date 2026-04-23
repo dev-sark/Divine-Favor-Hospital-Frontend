@@ -4,7 +4,7 @@ import * as React from "react"
 import { DashboardLayout } from "@/components/DashboardLayout"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/Card"
 import { Button } from "@/components/ui/Button"
-import { patientsApi, visitsApi } from "@/lib/api"
+import { patientsApi, visitsApi, apiRequest } from "@/lib/api"
 import { Search, User, Phone, Calendar, Activity } from "lucide-react"
 
 export default function HistoryPage() {
@@ -44,7 +44,18 @@ export default function HistoryPage() {
         setIsLoadingHistory(true)
         try {
             const history = await visitsApi.getVisitHistory(patient.id)
-            setActiveHistory(history || [])
+            
+            // Enrich history with medical records
+            const enrichedHistory = await Promise.all((history || []).map(async (visit: any) => {
+                try {
+                    const record = await apiRequest(`/medical-records/visit/${visit.id}`)
+                    return { ...visit, record }
+                } catch (e) {
+                    return visit
+                }
+            }))
+            
+            setActiveHistory(enrichedHistory)
         } catch (err) {
             console.error("Failed to load history", err)
             setActiveHistory([])
@@ -145,12 +156,35 @@ export default function HistoryPage() {
                                                                                         {new Date(visit.visitDate).toLocaleDateString(undefined, { dateStyle: 'long' })}
                                                                                     </p>
                                                                                     <p className="font-bold text-slate-800 text-xs mb-3 border-b pb-1 border-slate-50">CLINICAL VITALS</p>
-                                                                                    <div className="grid grid-cols-2 gap-2 text-xs text-slate-600">
+                                                                                    <div className="grid grid-cols-2 gap-2 text-xs text-slate-600 mb-4">
                                                                                         <div><span className="text-slate-400 font-medium">BP:</span> <span className="font-bold">{visit.bloodPressure || '-'}</span></div>
                                                                                         <div><span className="text-slate-400 font-medium">Temp:</span> <span className="font-bold text-teal-600">{visit.temperature}°C</span></div>
                                                                                         <div><span className="text-slate-400 font-medium">Weight:</span> <span className="font-bold">{visit.weight}kg</span></div>
-                                                                                        <div><span className="text-slate-400 font-medium">Status:</span> <span className="text-[10px] py-0.5 px-1 bg-slate-100 rounded text-slate-500">{visit.status}</span></div>
+                                                                                        <div><span className="text-slate-400 font-medium">Status:</span> <span className="text-[10px] py-0.5 px-1 bg-slate-100 rounded text-slate-500 font-bold">{visit.priority || 'NORMAL'}</span></div>
+                                                                                        <div className="col-span-2 mt-1 border-t border-slate-50 pt-1">
+                                                                                            <span className="text-[9px] font-bold text-slate-400 uppercase">Nurse: </span>
+                                                                                            <span className="text-[9px] font-bold text-slate-600">{visit.nurse?.username || 'General Triage'}</span>
+                                                                                        </div>
                                                                                     </div>
+
+                                                                                    {visit.record && (
+                                                                                        <div className="space-y-3 pt-3 border-t border-slate-100 italic">
+                                                                                            <div>
+                                                                                                <p className="text-[10px] items-center gap-1 font-bold text-primary uppercase flex mb-1">
+                                                                                                    <Activity className="w-3 h-3" /> Physician Diagnosis
+                                                                                                </p>
+                                                                                                <p className="text-xs text-slate-700 font-medium line-clamp-2">{visit.record.diagnosis}</p>
+                                                                                            </div>
+                                                                                            <div>
+                                                                                                <p className="text-[10px] font-bold text-slate-400 uppercase mb-1">Prescription</p>
+                                                                                                <p className="text-xs text-slate-600">{visit.record.prescription}</p>
+                                                                                            </div>
+                                                                                            <div className="flex justify-between items-center bg-slate-50 p-2 rounded-lg mt-2">
+                                                                                                <span className="text-[9px] font-bold text-slate-400 uppercase">Doctor</span>
+                                                                                                <span className="text-[9px] font-bold text-slate-900">{visit.record.doctor?.username || 'Attending Physician'}</span>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    )}
                                                                                 </div>
                                                                             ))}
                                                                         </div>
