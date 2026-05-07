@@ -28,13 +28,16 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
                 <div className="h-full flex flex-col px-4 py-8">
                     <Logo className="px-2 mb-10" />
 
-                    <nav className="flex-1 space-y-2">
+                    <nav className="flex-1 space-y-2 overflow-y-auto pb-4 pr-1">
                         {/* Common Items */}
                         <NavItem href="/dashboard/overview" label="Overview" active={pathname === '/dashboard/overview'} />
 
                         {/* Core Staff Workflows */}
                         {(role === 'ADMIN' || role === 'RECEPTIONIST' || role === 'NURSE') && (
-                            <NavItem href="/dashboard/registration" label="Registration Flow" active={pathname === '/dashboard/registration'} />
+                            <>
+                                <NavItem href="/dashboard/registration" label="Registration Flow" active={pathname === '/dashboard/registration'} />
+                                <NavItem href="/dashboard/appointments" label="Clinic Schedule" active={pathname === '/dashboard/appointments'} />
+                            </>
                         )}
 
                         <NavItem href="/dashboard/history" label="All Patients" active={pathname === '/dashboard/history'} />
@@ -51,13 +54,30 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
                             <NavItem href="/dashboard/pharmacy" label="Pharmacy Portal" active={pathname === '/dashboard/pharmacy'} />
                         )}
 
+                        {(role === 'ADMIN' || role === 'DOCTOR' || role === 'LAB_TECH') && (
+                            <NavItem href="/dashboard/lab" label="Laboratory" active={pathname === '/dashboard/lab'} />
+                        )}
+
+                        {(role === 'ADMIN' || role === 'NURSE' || role === 'DOCTOR') && (
+                            <NavItem href="/dashboard/ward" label="Wards & Admissions" active={pathname === '/dashboard/ward'} />
+                        )}
+
+                        {(role === 'ADMIN' || role === 'ACCOUNTANT') && (
+                            <NavItem href="/dashboard/billing" label="Billing" active={pathname === '/dashboard/billing'} />
+                        )}
+
                         {role === 'ADMIN' && (
                             <>
+                                <NavItem href="/dashboard/analytics/revenue" label="Revenue Analysis" active={pathname === '/dashboard/analytics/revenue'} />
                                 <NavItem href="/dashboard/performance" label="Performance Board" active={pathname === '/dashboard/performance'} />
-                                <NavItem href="/dashboard/staff" label="Staff Management" active={pathname === '/dashboard/staff'} />
+                                <NavItem href="/dashboard/staff" label="Staff Overview" active={pathname === '/dashboard/staff'} />
+                                <NavItem href="/dashboard/staff/hr" label="HR & Payroll" active={pathname === '/dashboard/staff/hr'} />
+                                <NavItem href="/dashboard/settings/pricing" label="Price List" active={pathname === '/dashboard/settings/pricing'} />
+                                <NavItem href="/dashboard/audit" label="Audit Log" active={pathname === '/dashboard/audit'} />
                             </>
                         )}
 
+                        <NavItem href="/dashboard/my-report" label="My Work Log" active={pathname === '/dashboard/my-report'} />
                         <NavItem href="/dashboard/settings" label="Account Settings" active={pathname === '/dashboard/settings'} />
                     </nav>
 

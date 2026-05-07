@@ -47,6 +47,10 @@ export const usersApi = {
     deleteUser: (id: number) => apiRequest(`/users/${id}`, { method: 'DELETE' }),
 };
 
+export const staffApi = {
+    getAll: () => apiRequest('/users'),
+};
+
 export const patientsApi = {
     getAllPatients: () => apiRequest('/patients'),
     registerPatient: (patient: any) => apiRequest('/patients/register', {
@@ -78,9 +82,64 @@ export const recordsApi = {
         body: JSON.stringify(payload),
     }),
     getRecordForVisit: (visitId: number) => apiRequest(`/medical-records/visit/${visitId}`),
+    getRecordsByPatient: (patientId: number) => apiRequest(`/medical-records/patient/${patientId}`),
+    finalizeDispensing: (visitId: number, notes: string) => apiRequest(`/medical-records/visit/${visitId}/dispense`, {
+        method: 'PUT',
+        body: JSON.stringify({ notes }),
+    }),
 };
 
 export const analyticsApi = {
     getSummary: () => apiRequest('/analytics/summary'),
-    getStaffPerformance: () => apiRequest('/analytics/staff-performance'),
+    getStaffPerformance: (start: string, end: string) => apiRequest(`/analytics/staff-performance?start=${start}&end=${end}`),
+    getRevenueReport: (start: string, end: string) => apiRequest(`/analytics/revenue?start=${start}&end=${end}`),
+    getMyActivity: (userId: number, start: string, end: string) => apiRequest(`/analytics/my-activity?userId=${userId}&start=${start}&end=${end}`),
+    getDiseaseTrends: () => apiRequest('/analytics/disease-trends'),
+};
+
+export const auditApi = {
+    getAll: () => apiRequest('/audit'),
+};
+
+export const labApi = {
+    requestTest: (visitId: number, data: any) => apiRequest(`/lab/request/${visitId}`, { method: 'POST', body: JSON.stringify(data) }),
+    recordResults: (orderId: number, results: string) => apiRequest(`/lab/results/${orderId}`, { method: 'PUT', body: JSON.stringify({ results }) }),
+    getByVisit: (visitId: number) => apiRequest(`/lab/visit/${visitId}`),
+    getPending: () => apiRequest('/lab/pending'),
+};
+
+export const billingApi = {
+    createBill: (visitId: number, data: any) => apiRequest(`/billing/create/${visitId}`, { method: 'POST', body: JSON.stringify(data) }),
+    addCharge: (visitId: number, category: string, amount: number) => apiRequest(`/billing/add-charge/${visitId}`, { method: 'PUT', body: JSON.stringify({ category, amount }) }),
+    payBill: (billId: number) => apiRequest(`/billing/pay/${billId}`, { method: 'PUT' }),
+    getUnpaid: () => apiRequest('/billing/unpaid'),
+    getByPatient: (patientId: number) => apiRequest(`/billing/patient/${patientId}`),
+};
+
+export const servicesApi = {
+    getAll: () => apiRequest('/hospital-services'),
+    getByCategory: (cat: string) => apiRequest(`/hospital-services/category/${cat}`),
+    save: (data: any) => apiRequest('/hospital-services', { method: 'POST', body: JSON.stringify(data) }),
+    delete: (id: number) => apiRequest(`/hospital-services/${id}`, { method: 'DELETE' }),
+};
+
+export const wardApi = {
+    getAll: () => apiRequest('/wards'),
+    getAvailableBeds: (wardId: number) => apiRequest(`/wards/${wardId}/available-beds`),
+    admit: (data: any) => apiRequest('/wards/admit', { method: 'POST', body: JSON.stringify(data) }),
+    discharge: (id: number) => apiRequest(`/wards/discharge/${id}`, { method: 'PUT' }),
+};
+
+export const appointmentApi = {
+    getByDate: (date: string) => apiRequest(`/appointments/date?date=${date}`),
+    schedule: (data: any) => apiRequest('/appointments', { method: 'POST', body: JSON.stringify(data) }),
+    checkIn: (id: number) => apiRequest(`/appointments/${id}/check-in`, { method: 'POST' }),
+    cancel: (id: number) => apiRequest(`/appointments/${id}`, { method: 'DELETE' }),
+};
+
+export const hrApi = {
+    getShifts: (date: string) => apiRequest(`/hr/shifts?date=${date}`),
+    assignShift: (data: any, admin: string) => apiRequest(`/hr/shifts?admin=${admin}`, { method: 'POST', body: JSON.stringify(data) }),
+    generatePayroll: (data: any) => apiRequest('/hr/payroll/generate', { method: 'POST', body: JSON.stringify(data) }),
+    pay: (id: number, admin: string) => apiRequest(`/hr/payroll/pay/${id}?admin=${admin}`, { method: 'PUT' }),
 };

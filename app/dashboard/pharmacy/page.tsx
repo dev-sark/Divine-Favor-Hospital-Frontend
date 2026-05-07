@@ -4,7 +4,7 @@ import * as React from "react"
 import { DashboardLayout } from "@/components/DashboardLayout"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/Card"
 import { Button } from "@/components/ui/Button"
-import { visitsApi, apiRequest } from "@/lib/api"
+import { visitsApi, recordsApi } from "@/lib/api"
 import { Pill, User, ClipboardList, Search, RefreshCcw } from "lucide-react"
 
 export default function PharmacyPage() {
@@ -12,21 +12,21 @@ export default function PharmacyPage() {
     const [isLoading, setIsLoading] = React.useState(true)
     const [searchTerm, setSearchTerm] = React.useState("")
     const [selectedRecord, setSelectedRecord] = React.useState<any>(null)
+    const [dispensingNotes, setDispensingNotes] = React.useState("")
+    const [isConfirming, setIsConfirming] = React.useState(false)
+    const [drugAmount, setDrugAmount] = React.useState("")
+    const [isUpdatingBill, setIsUpdatingBill] = React.useState(false)
 
     const fetchData = async () => {
         setIsLoading(true)
         try {
             console.log("Fetching prescriptions for status: WAITING_FOR_PHARMACY")
-            // Fetch only those waiting specifically for the pharmacy
             const queuedVisits = await visitsApi.getQueuedVisits("WAITING_FOR_PHARMACY")
-            console.log("Found queued visits:", queuedVisits)
             
             let prescriptionRecords: any[] = []
-            
             for (const visit of (queuedVisits || [])) {
                 try {
-                    // Check for record for this visit
-                    const record = await apiRequest(`/medical-records/visit/${visit.id}`)
+                    const record = await recordsApi.getRecordForVisit(visit.id)
                     if (record) {
                         prescriptionRecords.push({
                             ...record,
@@ -40,7 +40,6 @@ export default function PharmacyPage() {
                     console.warn(`No medical record found for visit ${visit.id}`, e)
                 }
             }
-            
             setVisits(prescriptionRecords)
         } catch (err: any) {
             console.error("Pharmacy Fetch Error:", err)
@@ -53,6 +52,45 @@ export default function PharmacyPage() {
         fetchData()
     }, [])
 
+    const handleSelectRecord = (record: any) => {
+        setSelectedRecord(record)
+        setDispensingNotes("")
+        setDrugAmount("")
+    }
+
+    const handleUpdateBill = async () => {
+        if (!selectedRecord || !drugAmount) return
+        setIsUpdatingBill(true)
+        try {
+            await billingApi.addCharge(selectedRecord.visitId, "PHARMACY", parseFloat(drugAmount))
+            alert("Bill Updated! Patient can now pay at the Cashier.")
+        } catch (err) {
+            alert("Failed to update bill. Check if a bill exists for this visit.")
+        } finally {
+            setIsUpdatingBill(false)
+        }
+    }
+
+    const handleDispense = async () => {
+        if (isConfirming) return;
+        setIsConfirming(true);
+        try {
+            // 1. Save dispensing notes
+            await recordsApi.finalizeDispensing(selectedRecord.visitId, dispensingNotes);
+            // 2. Mark visit as completed
+            await visitsApi.updateStatus(selectedRecord.visitId, "COMPLETED");
+            
+            alert("Medication Dispensed & Transaction Finalized.");
+            setSelectedRecord(null);
+            fetchData();
+        } catch (err) {
+            console.error(err);
+            alert("Error: Status could not be updated.");
+        } finally {
+            setIsConfirming(false);
+        }
+    }
+
     const filteredVisits = visits.filter(v => 
         v.patientName.toLowerCase().includes(searchTerm.toLowerCase()) ||
         v.folderNumber.toLowerCase().includes(searchTerm.toLowerCase())
@@ -64,51 +102,55 @@ export default function PharmacyPage() {
                 <div className="flex justify-between items-center">
                     <div>
                         <h2 className="text-2xl font-bold text-slate-900 tracking-tight">Pharmacy Portal</h2>
-                        <p className="text-sm text-slate-500">View and dispense medications prescribed by doctors.</p>
+                        <p className="text-sm text-slate-500">Professional Medication Dispensing & Financial Integration.</p>
                     </div>
-                    <Button variant="outline" onClick={fetchData} className="flex gap-2">
+                    <Button variant="outline" onClick={fetchData} className="flex gap-2 bg-indigo-50 border-indigo-100 text-indigo-700 hover:bg-indigo-100">
                         <RefreshCcw className={`w-4 h-4 ${isLoading ? 'animate-spin' : ''}`} />
-                        Refresh List
+                        Sync Pharmacy Queue
                     </Button>
                 </div>
 
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                    <Card className="lg:col-span-1">
-                        <CardHeader>
-                            <CardTitle className="text-lg">Pending Dispensing</CardTitle>
+                    <Card className="lg:col-span-1 border-slate-100 shadow-sm rounded-3xl overflow-hidden">
+                        <CardHeader className="bg-slate-50/50">
+                            <CardTitle className="text-sm font-bold flex items-center gap-2">
+                                <ClipboardList className="w-4 h-4 text-indigo-500" />
+                                Prescriptions Waiting
+                            </CardTitle>
                             <div className="relative mt-2">
-                                <Search className="absolute left-2 top-2.5 h-3.5 w-3.5 text-slate-400" />
+                                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-slate-400" />
                                 <input 
-                                    className="pl-8 flex h-9 w-full rounded-md border border-slate-200 bg-transparent px-3 py-1 text-xs shadow-sm focus:ring-1 focus:ring-primary outline-none" 
-                                    placeholder="Search by name or folder..."
+                                    className="pl-9 flex h-10 w-full rounded-xl border border-slate-200 bg-white px-3 py-1 text-xs shadow-sm focus:ring-2 focus:ring-indigo-500 outline-none transition-all" 
+                                    placeholder="Search patient or folder..."
                                     value={searchTerm}
                                     onChange={(e) => setSearchTerm(e.target.value)}
                                 />
                             </div>
                         </CardHeader>
-                        <CardContent className="space-y-3">
+                        <CardContent className="space-y-3 p-4">
                             {isLoading ? (
-                                <p className="text-center text-slate-400 text-xs py-10 italic">Connecting to pharmacy vault...</p>
+                                <p className="text-center text-slate-400 text-xs py-10 italic">Querying clinical records...</p>
                             ) : filteredVisits.length === 0 ? (
-                                <div className="text-center py-10 bg-slate-50 rounded-xl border border-dashed">
-                                    <p className="text-slate-400 text-xs italic">No prescriptions waiting.</p>
-                                    <p className="text-[10px] text-slate-300 mt-1">Status: WAITING_FOR_PHARMACY</p>
+                                <div className="text-center py-12 bg-slate-50/50 rounded-2xl border border-dashed border-slate-200">
+                                    <p className="text-slate-400 text-xs italic font-medium">No prescriptions pending.</p>
+                                    <p className="text-[10px] text-slate-300 mt-2 uppercase tracking-widest">Vault Secure</p>
                                 </div>
                             ) : (
                                 filteredVisits.map((v) => (
                                     <div 
                                         key={v.id} 
-                                        onClick={() => setSelectedRecord(v)}
-                                        className={`p-4 rounded-xl border cursor-pointer transition-all duration-200 ${selectedRecord?.id === v.id ? "bg-emerald-50 border-emerald-300 shadow-md translate-x-1" : "bg-white border-slate-100 hover:border-slate-300"}`}
+                                        onClick={() => handleSelectRecord(v)}
+                                        className={`p-4 rounded-2xl border-2 cursor-pointer transition-all duration-200 relative group ${selectedRecord?.id === v.id ? "bg-indigo-50 border-indigo-400 shadow-md translate-x-1" : "bg-white border-slate-50 hover:border-slate-200"}`}
                                     >
-                                        <div className="flex items-center gap-3">
-                                            <div className={`h-8 w-8 rounded-full flex items-center justify-center text-[10px] font-bold ${selectedRecord?.id === v.id ? 'bg-emerald-200 text-emerald-700' : 'bg-slate-100 text-slate-500'}`}>
+                                        <div className="flex items-center gap-4">
+                                            <div className={`h-10 w-10 rounded-xl flex items-center justify-center text-sm font-bold shadow-sm transition-colors ${selectedRecord?.id === v.id ? 'bg-indigo-500 text-white' : 'bg-slate-100 text-slate-400 group-hover:bg-indigo-100 group-hover:text-indigo-500'}`}>
                                                 {v.patientName.charAt(0)}
                                             </div>
                                             <div className="flex-1 overflow-hidden">
                                                 <p className="text-sm font-bold text-slate-900 truncate">{v.patientName}</p>
-                                                <p className="text-[10px] text-slate-500 font-mono uppercase tracking-tighter">{v.folderNumber}</p>
+                                                <p className="text-[10px] text-slate-500 font-mono uppercase tracking-tighter mt-0.5">{v.folderNumber}</p>
                                             </div>
+                                            <div className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
                                         </div>
                                     </div>
                                 ))
@@ -116,85 +158,96 @@ export default function PharmacyPage() {
                         </CardContent>
                     </Card>
 
-                    <Card className="lg:col-span-2 border-emerald-100 bg-emerald-50/10 shadow-lg min-h-[500px]">
+                    <Card className="lg:col-span-2 border-indigo-100 bg-white shadow-xl rounded-[40px] overflow-hidden min-h-[600px] border-2">
                         {selectedRecord ? (
                             <div className="flex flex-col h-full">
-                                <CardHeader className="border-b border-emerald-100 p-6 flex flex-row items-center gap-4 bg-white/50">
-                                    <div className="h-12 w-12 bg-emerald-100 rounded-2xl flex items-center justify-center text-emerald-600 shadow-inner">
-                                        <Pill size={24} />
+                                <CardHeader className="border-b border-indigo-50 p-8 flex flex-row items-center gap-6 bg-slate-50/30">
+                                    <div className="h-16 w-16 bg-indigo-600 rounded-3xl flex items-center justify-center text-white shadow-lg shadow-indigo-100">
+                                        <Pill size={32} />
                                     </div>
                                     <div>
-                                        <CardTitle className="text-xl">{selectedRecord.patientName}</CardTitle>
-                                        <CardDescription className="flex items-center gap-2">
-                                            <User className="w-3 h-3" /> Attending Physician: {selectedRecord.doctor?.username || 'Hospital Doctor'}
+                                        <CardTitle className="text-2xl font-black text-slate-900">{selectedRecord.patientName}</CardTitle>
+                                        <CardDescription className="flex items-center gap-3 mt-1 font-medium italic">
+                                            <span className="bg-indigo-100 text-indigo-700 px-2 py-0.5 rounded text-[10px] font-bold not-italic">PHYSICIAN ORDER</span>
+                                            Dr. {selectedRecord.doctor?.username || 'Medical Officer'}
                                         </CardDescription>
                                     </div>
                                 </CardHeader>
-                                <CardContent className="p-8 space-y-8 flex-1">
-                                    <div className="grid grid-cols-2 gap-8">
-                                        <div className="space-y-1">
-                                            <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Medical Diagnosis</p>
-                                            <div className="bg-slate-100/50 p-3 rounded-lg border border-slate-100">
-                                                <p className="text-sm font-bold text-slate-700">{selectedRecord.diagnosis}</p>
+                                <CardContent className="p-10 space-y-8 flex-1">
+                                    <div className="bg-amber-50 p-6 rounded-3xl border border-amber-100 flex items-center justify-between">
+                                        <div>
+                                            <p className="text-[10px] font-black text-amber-600 uppercase tracking-widest">Pharmacist Billing Control</p>
+                                            <p className="text-sm font-bold text-amber-900 mb-2">Set drug costs for the cashier</p>
+                                            <div className="flex gap-2">
+                                                <input 
+                                                    type="number"
+                                                    placeholder="GHS amount"
+                                                    className="w-32 p-2 bg-white rounded-lg border border-amber-200 outline-none font-bold text-sm"
+                                                    value={drugAmount}
+                                                    onChange={(e) => setDrugAmount(e.target.value)}
+                                                />
+                                                <Button size="sm" className="bg-amber-600" onClick={handleUpdateBill} disabled={isUpdatingBill}>
+                                                    Update Patient Bill
+                                                </Button>
                                             </div>
                                         </div>
-                                        <div className="space-y-1">
-                                            <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Time Ordered</p>
-                                            <p className="text-sm font-medium text-slate-900 border-b border-slate-100 pb-1 w-fit">
-                                                {new Date(selectedRecord.visitDate).toLocaleString([], { dateStyle: 'medium', timeStyle: 'short' })}
+                                        <div className="text-right">
+                                            <p className="text-[10px] font-black text-amber-500 uppercase tracking-widest">Instructions</p>
+                                            <p className="text-xs text-amber-800 font-medium max-w-[200px]">Update the bill first so the patient can pay at the cashier before collection.</p>
+                                        </div>
+                                    </div>
+
+                                    <div className="space-y-6">
+                                        <div className="flex items-center gap-3 text-indigo-700">
+                                            <ClipboardList size={22} className="opacity-50" />
+                                            <p className="text-xs font-black uppercase tracking-[0.1em]">Doctor's Prescription Details</p>
+                                        </div>
+                                        <div className="bg-indigo-50/30 p-8 rounded-[30px] border-2 border-indigo-100 shadow-sm relative overflow-hidden group">
+                                            <div className="absolute top-0 right-0 p-4 text-indigo-100">
+                                                <Pill size={48} className="opacity-10 rotate-12" />
+                                            </div>
+                                            <p className="text-slate-800 whitespace-pre-wrap leading-relaxed font-bold text-lg italic relative z-10">
+                                                {selectedRecord.prescription}
                                             </p>
                                         </div>
                                     </div>
 
-                                    <div className="space-y-4">
-                                        <div className="flex items-center gap-2 text-emerald-700">
-                                            <ClipboardList size={18} />
-                                            <p className="text-xs font-bold uppercase tracking-wider">Prescribed Medication & Instructions</p>
-                                        </div>
-                                        <div className="bg-white p-6 rounded-2xl border-2 border-emerald-200 shadow-sm relative overflow-hidden group">
-                                            <div className="absolute top-0 right-0 p-2 bg-emerald-50 text-emerald-600 rounded-bl-xl opacity-50">
-                                                <Pill size={16} />
-                                            </div>
-                                            <p className="text-slate-800 whitespace-pre-wrap leading-relaxed font-medium text-base italic">
-                                                "{selectedRecord.prescription}"
-                                            </p>
-                                        </div>
+                                    <div className="space-y-3 pt-4">
+                                        <label className="text-[10px] font-black text-emerald-600 uppercase tracking-[0.2em]">Pharmacist Dispensing Notes</label>
+                                        <textarea 
+                                            className="w-full min-h-[100px] rounded-3xl border-2 border-emerald-50 bg-white p-5 text-sm focus:border-emerald-500 focus:bg-emerald-50/10 transition-all outline-none italic font-medium text-slate-700"
+                                            placeholder="Record actual quantities dispensed or specific advice..."
+                                            value={dispensingNotes}
+                                            onChange={(e) => setDispensingNotes(e.target.value)}
+                                        />
                                     </div>
                                 </CardContent>
-                                <div className="p-6 border-t border-emerald-100 bg-white flex justify-end gap-3 mt-auto">
-                                    <Button variant="outline" onClick={() => setSelectedRecord(null)}>Close</Button>
+                                <div className="p-8 border-t border-slate-50 bg-slate-50/30 flex justify-end gap-4 mt-auto">
+                                    <Button variant="outline" className="h-12 px-8 rounded-2xl font-bold" onClick={() => handleSelectRecord(null)}>Close</Button>
                                     <Button 
-                                        className="bg-emerald-600 hover:bg-emerald-700 px-8 font-bold text-white shadow-lg shadow-emerald-200"
-                                        onClick={async () => {
-                                            try {
-                                                await visitsApi.updateStatus(selectedRecord.visitId, "COMPLETED");
-                                                alert("Action Success: Medications dispensed and record archived.");
-                                                setSelectedRecord(null);
-                                                fetchData();
-                                            } catch (err) {
-                                                alert("Error: Database update failed.");
-                                            }
-                                        }}
+                                        className="h-12 bg-emerald-600 hover:bg-emerald-700 px-12 font-black text-white shadow-xl shadow-emerald-100 rounded-2xl"
+                                        disabled={isConfirming}
+                                        onClick={handleDispense}
                                     >
-                                        Confirm Dispensed
+                                        {isConfirming ? "Securing Transaction..." : "Authorize & Dispense"}
                                     </Button>
                                 </div>
                             </div>
                         ) : (
-                            <div className="h-full flex flex-col items-center justify-center text-center p-12 space-y-4">
-                                <div className="h-20 w-20 bg-emerald-50 rounded-3xl flex items-center justify-center mb-2 text-emerald-600 shadow-sm rotate-3 animate-pulse">
-                                    <Pill size={40} />
+                            <div className="h-full flex flex-col items-center justify-center text-center p-12 space-y-6">
+                                <div className="h-24 w-24 bg-indigo-50 rounded-[35px] flex items-center justify-center mb-2 text-indigo-600 shadow-sm rotate-3 animate-pulse">
+                                    <Pill size={48} />
                                 </div>
-                                <div>
-                                    <h3 className="text-xl font-bold text-slate-900">Pharmacy Queue Ready</h3>
-                                    <p className="text-sm text-slate-500 max-w-xs mt-2 mx-auto leading-relaxed">
-                                        Please select a patient from the left column to view their prescription details and fulfill the order.
+                                <div className="space-y-2">
+                                    <h3 className="text-2xl font-black text-slate-800">Pharmacy Queue Ready</h3>
+                                    <p className="text-sm text-slate-400 max-w-sm mx-auto leading-relaxed font-medium">
+                                        Select a clinical case from the pendings queue to begin the medication dispensing and verification process.
                                     </p>
                                 </div>
-                                <div className="pt-4 flex gap-2">
-                                    <div className="h-1.5 w-1.5 rounded-full bg-emerald-300"></div>
-                                    <div className="h-1.5 w-1.5 rounded-full bg-emerald-300 opacity-50"></div>
-                                    <div className="h-1.5 w-1.5 rounded-full bg-emerald-300 opacity-25"></div>
+                                <div className="pt-4 flex gap-3">
+                                    <div className="h-2 w-2 rounded-full bg-indigo-500"></div>
+                                    <div className="h-2 w-2 rounded-full bg-indigo-300"></div>
+                                    <div className="h-2 w-2 rounded-full bg-indigo-100"></div>
                                 </div>
                             </div>
                         )}
