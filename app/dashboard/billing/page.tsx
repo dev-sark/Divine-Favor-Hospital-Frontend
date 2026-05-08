@@ -4,7 +4,7 @@ import * as React from "react"
 import { DashboardLayout } from "@/components/DashboardLayout"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/Card"
 import { billingApi } from "@/lib/api"
-import { Banknote, Search, CreditCard, Receipt, Clock, User, CheckCircle2 } from "lucide-react"
+import { Banknote, Search, CreditCard, Receipt, Clock, User, CheckCircle2, ShieldCheck } from "lucide-react"
 
 export default function BillingPage() {
     const [unpaidBills, setUnpaidBills] = React.useState<any[]>([])
