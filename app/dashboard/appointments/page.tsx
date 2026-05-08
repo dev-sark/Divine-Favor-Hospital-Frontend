@@ -3,7 +3,7 @@
 import * as React from "react"
 import { DashboardLayout } from "@/components/DashboardLayout"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/Card"
-import { appointmentApi, patientApi, staffApi } from "@/lib/api"
+import { appointmentApi, patientsApi, staffApi } from "@/lib/api"
 import { Calendar, Clock, UserPlus, Search, CheckCircle, XCircle, MoreVertical, Plus } from "lucide-react"
 import { Button } from "@/components/ui/Button"
 
@@ -27,7 +27,7 @@ export default function AppointmentsPage() {
         try {
             const data = await appointmentApi.getByDate(selectedDate)
             setAppointments(data || [])
-            
+
             const staff = await staffApi.getAll()
             setDoctors(staff.filter((s: any) => s.role === 'DOCTOR') || [])
         } catch (err) {
@@ -83,14 +83,14 @@ export default function AppointmentsPage() {
                     <div className="flex gap-4">
                         <div className="bg-white p-2 rounded-2xl border border-slate-100 shadow-sm flex items-center gap-2">
                             <Calendar className="text-indigo-500 w-4 h-4 ml-2" />
-                            <input 
-                                type="date" 
+                            <input
+                                type="date"
                                 className="border-none bg-transparent text-xs font-black outline-none"
                                 value={selectedDate}
                                 onChange={(e) => setSelectedDate(e.target.value)}
                             />
                         </div>
-                        <Button 
+                        <Button
                             onClick={() => setShowForm(!showForm)}
                             className="bg-indigo-600 text-white rounded-2xl font-black px-6 hover:scale-105 transition-all flex items-center gap-2"
                         >
@@ -142,8 +142,8 @@ export default function AppointmentsPage() {
                         <div className="p-20 text-center italic text-slate-300 font-bold">Checking clinic schedule...</div>
                     ) : appointments.length === 0 ? (
                         <div className="p-20 text-center space-y-4 rounded-[40px] bg-slate-50 border-2 border-dashed border-slate-200">
-                             <Calendar className="w-16 h-16 text-slate-200 mx-auto" />
-                             <p className="text-slate-400 font-black">No appointments scheduled for this date.</p>
+                            <Calendar className="w-16 h-16 text-slate-200 mx-auto" />
+                            <p className="text-slate-400 font-black">No appointments scheduled for this date.</p>
                         </div>
                     ) : (
                         appointments.map((app) => (
@@ -154,7 +154,7 @@ export default function AppointmentsPage() {
                                         <div className="flex items-center gap-6">
                                             <div className="h-16 w-16 bg-slate-50 rounded-[24px] flex flex-col items-center justify-center border border-slate-100">
                                                 <span className="text-[8px] font-black uppercase text-slate-400">Time</span>
-                                                <span className="text-sm font-black text-slate-900">{new Date(app.appointmentDate).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</span>
+                                                <span className="text-sm font-black text-slate-900">{new Date(app.appointmentDate).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
                                             </div>
                                             <div>
                                                 <h3 className="text-lg font-black text-slate-800">{app.patient.fullName}</h3>
@@ -168,7 +168,7 @@ export default function AppointmentsPage() {
 
                                         <div className="flex items-center gap-4">
                                             {app.status === 'SCHEDULED' && (
-                                                <Button 
+                                                <Button
                                                     className="bg-emerald-500 text-white font-black rounded-xl px-6 hover:bg-emerald-600 shadow-lg shadow-emerald-50"
                                                     onClick={() => handleCheckIn(app.id)}
                                                 >
