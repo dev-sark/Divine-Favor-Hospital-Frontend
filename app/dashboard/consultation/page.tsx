@@ -327,8 +327,8 @@ export default function ConsultationPage() {
                                             <div className="flex justify-between items-center mb-4">
                                                 <h4 className="text-sm font-black text-slate-800 uppercase tracking-widest">Patient Disposition</h4>
                                                 <div className="flex gap-2">
-                                                    <Button variant={!isAdmitting ? "default" : "outline"} size="sm" onClick={() => setIsAdmitting(false)}>Outpatient</Button>
-                                                    <Button variant={isAdmitting ? "destructive" : "outline"} size="sm" onClick={() => setIsAdmitting(true)}>In-Patient (Admit)</Button>
+                                                    <Button variant={!isAdmitting ? "primary" : "outline"} size="sm" onClick={() => setIsAdmitting(false)}>Outpatient</Button>
+                                                    <Button variant={isAdmitting ? "primary" : "outline"} size="sm" onClick={() => setIsAdmitting(true)}>In-Patient (Admit)</Button>
                                                 </div>
                                             </div>
 
