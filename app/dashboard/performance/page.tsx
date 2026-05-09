@@ -160,8 +160,17 @@ export default function PerformancePage() {
     const fetchData = async () => {
         setIsLoading(true)
         try {
+            let start = "ALL"
+            let end = "ALL"
+
+            if (timePeriod === "MONTH") {
+                const now = new Date()
+                start = new Date(now.getFullYear(), now.getMonth(), 1).toISOString().split('T')[0]
+                end = now.toISOString().split('T')[0]
+            }
+
             const [perf, trends] = await Promise.all([
-                analyticsApi.getStaffPerformance(timePeriod),
+                analyticsApi.getStaffPerformance(start, end),
                 analyticsApi.getDiseaseTrends(),
             ])
             setPerformanceData(perf || [])
