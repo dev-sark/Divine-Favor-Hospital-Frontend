@@ -4,7 +4,7 @@ import * as React from "react"
 import { DashboardLayout } from "@/components/DashboardLayout"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/Card"
 import { Button } from "@/components/ui/Button"
-import { visitsApi, recordsApi } from "@/lib/api"
+import { visitsApi, recordsApi, billingApi } from "@/lib/api"
 import { Pill, User, ClipboardList, Search, RefreshCcw } from "lucide-react"
 
 export default function PharmacyPage() {
