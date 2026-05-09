@@ -103,7 +103,7 @@ export default function MyReportPage() {
                     <h1 className="text-2xl font-black uppercase">DIVINE FAVOR HOSPITAL</h1>
                     <p className="text-sm font-bold mt-1">SAY NO TO FRAUD. YES TO ACCOUNTABILITY.</p>
                     <div className="mt-4 text-left grid grid-cols-2 text-[10px] font-bold uppercase">
-                        <p>Staff Name: {user?.username}</p>
+                        <p>Staff Name: {user?.name}</p>
                         <p className="text-right">Period: {startDate} TO {endDate}</p>
                         <p>Role: {user?.role}</p>
                         <p className="text-right">Generated: {new Date().toLocaleString()}</p>

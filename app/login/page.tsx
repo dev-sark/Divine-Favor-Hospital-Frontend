@@ -23,7 +23,7 @@ export default function LoginPage() {
 
         try {
             const response = await authApi.login({ username, password })
-            login(response.username, response.roles, response.token)
+            login(response.id, response.username, response.roles, response.token)
         } catch (err: any) {
             setError(err.message || "Invalid credentials. Please try again.")
         } finally {

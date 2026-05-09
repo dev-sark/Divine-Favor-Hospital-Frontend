@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation"
 type Role = 'ADMIN' | 'DOCTOR' | 'NURSE' | 'RECEPTIONIST' | 'LAB_TECH' | 'PHARMACIST' | 'CASHIER' | null
 
 interface User {
+    id: number
     name: string
     role: Role
     token: string
@@ -13,7 +14,7 @@ interface User {
 
 interface AuthContextType {
     user: User | null
-    login: (name: string, roles: string[], token: string) => void
+    login: (id: number, name: string, roles: string[], token: string) => void
     logout: () => void
     isLoading: boolean
 }
@@ -34,7 +35,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         setIsLoading(false)
     }, [])
 
-    const login = (name: string, roles: string[], token: string) => {
+    const login = (id: number, name: string, roles: string[], token: string) => {
         // Map Spring Security ROLE_X to internal Role type
         let userRole: Role = 'DOCTOR'
         if (roles.includes('ROLE_ADMIN')) userRole = 'ADMIN'
@@ -44,7 +45,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         else if (roles.includes('ROLE_PHARMACIST')) userRole = 'PHARMACIST'
         else if (roles.includes('ROLE_CASHIER')) userRole = 'CASHIER'
 
-        const newUser = { name, role: userRole, token }
+        const newUser = { id, name, role: userRole, token }
         setUser(newUser)
         localStorage.setItem('hms_user', JSON.stringify(newUser))
         localStorage.setItem('token', token)
