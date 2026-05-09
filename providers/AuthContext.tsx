@@ -3,7 +3,7 @@
 import * as React from "react"
 import { useRouter } from "next/navigation"
 
-type Role = 'ADMIN' | 'DOCTOR' | 'NURSE' | 'RECEPTIONIST' | 'LAB_TECH' | 'PHARMACIST' | 'CASHIER' | null
+type Role = 'ADMIN' | 'DOCTOR' | 'NURSE' | 'RECEPTIONIST' | 'LAB_TECH' | 'PHARMACIST' | 'CASHIER' | 'ACCOUNTANT' | null
 
 interface User {
     id: number
@@ -44,6 +44,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         else if (roles.includes('ROLE_LAB_TECH')) userRole = 'LAB_TECH'
         else if (roles.includes('ROLE_PHARMACIST')) userRole = 'PHARMACIST'
         else if (roles.includes('ROLE_CASHIER')) userRole = 'CASHIER'
+        else if (roles.includes('ROLE_ACCOUNTANT')) userRole = 'ACCOUNTANT'
 
         const newUser = { id, name, role: userRole, token }
         setUser(newUser)
