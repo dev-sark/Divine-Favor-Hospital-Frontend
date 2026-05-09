@@ -82,7 +82,7 @@ export default function ConsultationPage() {
                 visitId: activeVisit.id,
                 bedId: parseInt(selectedBedId),
                 reason: admissionReason || diagnosis,
-                username: user?.username
+                username: user?.name
             })
 
             alert("Patient Admitted Successfully!")
