@@ -61,7 +61,7 @@ export default function HRDashboard() {
 
     const handlePay = async (id: number) => {
         try {
-            await hrApi.pay(id, user?.username || "Admin")
+            await hrApi.pay(id, user?.name || "Admin")
             alert("Payment Disbursed Successfully!")
             setPayrollResult(null)
         } catch (err) {
@@ -135,7 +135,7 @@ export default function HRDashboard() {
                                                      <Briefcase size={24} />
                                                  </div>
                                                  <div>
-                                                     <h4 className="text-lg font-black text-slate-900 group-hover:text-indigo-600 transition-colors uppercase tracking-tight">{s.name}</h4>
+                                                     <h4 className="text-lg font-black text-slate-900 group-hover:text-indigo-600 transition-colors uppercase tracking-tight">{s.username}</h4>
                                                      <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">{s.role}</p>
                                                  </div>
                                              </div>

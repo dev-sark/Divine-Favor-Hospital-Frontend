@@ -113,7 +113,7 @@ export default function AppointmentsPage() {
                                 <label className="text-[10px] font-black text-slate-400 uppercase">Doctor</label>
                                 <select className="w-full bg-slate-50 p-3 rounded-xl border-none outline-none font-bold text-sm" value={doctorId} onChange={(e) => setDoctorId(e.target.value)}>
                                     <option value="">Any Available Doctor</option>
-                                    {doctors.map(d => <option key={d.id} value={d.id}>{d.name}</option>)}
+                                    {doctors.map(d => <option key={d.id} value={d.id}>{d.username}</option>)}
                                 </select>
                             </div>
                             <div className="space-y-1">
@@ -159,7 +159,7 @@ export default function AppointmentsPage() {
                                             <div>
                                                 <h3 className="text-lg font-black text-slate-800">{app.patient.fullName}</h3>
                                                 <div className="flex items-center gap-3 mt-1">
-                                                    <span className="text-[10px] font-bold text-slate-400">Dr. {app.doctor?.name || "Unassigned"}</span>
+                                                    <span className="text-[10px] font-bold text-slate-400">Dr. {app.doctor?.username || "Unassigned"}</span>
                                                     <span className="w-1 h-1 bg-slate-200 rounded-full"></span>
                                                     <span className="text-[10px] font-bold text-indigo-500 uppercase tracking-widest">{app.reason}</span>
                                                 </div>
