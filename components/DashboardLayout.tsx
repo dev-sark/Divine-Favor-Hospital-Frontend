@@ -6,6 +6,7 @@ import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { useAuth } from "@/providers/AuthContext"
 import { Button } from "./ui/Button"
+import { Menu, X, LogOut } from "lucide-react"
 
 interface DashboardLayoutProps {
     children: React.ReactNode
@@ -14,6 +15,7 @@ interface DashboardLayoutProps {
 export function DashboardLayout({ children }: DashboardLayoutProps) {
     const { user, logout, isLoading } = useAuth()
     const pathname = usePathname()
+    const [isSidebarOpen, setIsSidebarOpen] = React.useState(false)
 
     if (isLoading) return null
     if (!user) return null
@@ -23,62 +25,80 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
 
     return (
         <div className="flex min-h-screen bg-slate-50">
-            {/* Sidebar */}
-            <aside className="fixed left-0 top-0 z-40 h-screen w-64 border-r border-slate-200 bg-white shadow-sm transition-transform lg:translate-x-0">
-                <div className="h-full flex flex-col px-4 py-8">
-                    <Logo className="px-2 mb-10" />
+            {/* Sidebar Overlay for Mobile */}
+            {isSidebarOpen && (
+                <div 
+                    className="fixed inset-0 z-40 bg-slate-900/50 backdrop-blur-sm lg:hidden transition-opacity"
+                    onClick={() => setIsSidebarOpen(false)}
+                />
+            )}
 
-                    <nav className="flex-1 space-y-2 overflow-y-auto pb-4 pr-1">
+            {/* Sidebar */}
+            <aside className={`fixed left-0 top-0 z-50 h-screen w-72 border-r border-slate-200 bg-white shadow-2xl transition-transform duration-300 ease-in-out lg:translate-x-0 ${
+                isSidebarOpen ? 'translate-x-0' : '-translate-x-full'
+            }`}>
+                <div className="h-full flex flex-col px-4 py-8">
+                    <div className="flex items-center justify-between px-2 mb-10">
+                        <Logo />
+                        <button 
+                            onClick={() => setIsSidebarOpen(false)}
+                            className="lg:hidden p-2 text-slate-400 hover:text-slate-900 hover:bg-slate-100 rounded-2xl transition-all"
+                        >
+                            <X size={20} />
+                        </button>
+                    </div>
+
+                    <nav className="flex-1 space-y-2 overflow-y-auto pb-4 pr-1 custom-scrollbar">
                         {/* Common Items */}
-                        <NavItem href="/dashboard/overview" label="Overview" active={pathname === '/dashboard/overview'} />
+                        <NavItem href="/dashboard/overview" label="Overview" active={pathname === '/dashboard/overview'} onClick={() => setIsSidebarOpen(false)} />
 
                         {/* Core Staff Workflows */}
                         {(role === 'ADMIN' || role === 'RECEPTIONIST' || role === 'NURSE') && (
                             <>
-                                <NavItem href="/dashboard/registration" label="Registration Flow" active={pathname === '/dashboard/registration'} />
-                                <NavItem href="/dashboard/appointments" label="Clinic Schedule" active={pathname === '/dashboard/appointments'} />
+                                <NavItem href="/dashboard/registration" label="Registration Flow" active={pathname === '/dashboard/registration'} onClick={() => setIsSidebarOpen(false)} />
+                                <NavItem href="/dashboard/appointments" label="Clinic Schedule" active={pathname === '/dashboard/appointments'} onClick={() => setIsSidebarOpen(false)} />
                             </>
                         )}
 
-                        <NavItem href="/dashboard/history" label="All Patients" active={pathname === '/dashboard/history'} />
+                        <NavItem href="/dashboard/history" label="All Patients" active={pathname === '/dashboard/history'} onClick={() => setIsSidebarOpen(false)} />
 
                         {(role === 'ADMIN' || role === 'NURSE') && (
-                            <NavItem href="/dashboard/queue" label="Visits & Triage" active={pathname === '/dashboard/queue'} />
+                            <NavItem href="/dashboard/queue" label="Visits & Triage" active={pathname === '/dashboard/queue'} onClick={() => setIsSidebarOpen(false)} />
                         )}
 
                         {(role === 'ADMIN' || role === 'DOCTOR') && (
-                            <NavItem href="/dashboard/consultation" label="Doctor Consultation" active={pathname === '/dashboard/consultation'} />
+                            <NavItem href="/dashboard/consultation" label="Doctor Consultation" active={pathname === '/dashboard/consultation'} onClick={() => setIsSidebarOpen(false)} />
                         )}
 
                         {(role === 'ADMIN' || role === 'PHARMACIST') && (
-                            <NavItem href="/dashboard/pharmacy" label="Pharmacy Portal" active={pathname === '/dashboard/pharmacy'} />
+                            <NavItem href="/dashboard/pharmacy" label="Pharmacy Portal" active={pathname === '/dashboard/pharmacy'} onClick={() => setIsSidebarOpen(false)} />
                         )}
 
                         {(role === 'ADMIN' || role === 'DOCTOR' || role === 'LAB_TECH') && (
-                            <NavItem href="/dashboard/lab" label="Laboratory" active={pathname === '/dashboard/lab'} />
+                            <NavItem href="/dashboard/lab" label="Laboratory" active={pathname === '/dashboard/lab'} onClick={() => setIsSidebarOpen(false)} />
                         )}
 
                         {(role === 'ADMIN' || role === 'NURSE' || role === 'DOCTOR') && (
-                            <NavItem href="/dashboard/ward" label="Wards & Admissions" active={pathname === '/dashboard/ward'} />
+                            <NavItem href="/dashboard/ward" label="Wards & Admissions" active={pathname === '/dashboard/ward'} onClick={() => setIsSidebarOpen(false)} />
                         )}
 
                         {(role === 'ADMIN' || role === 'ACCOUNTANT') && (
-                            <NavItem href="/dashboard/billing" label="Billing" active={pathname === '/dashboard/billing'} />
+                            <NavItem href="/dashboard/billing" label="Billing" active={pathname === '/dashboard/billing'} onClick={() => setIsSidebarOpen(false)} />
                         )}
 
                         {role === 'ADMIN' && (
                             <>
-                                <NavItem href="/dashboard/analytics/revenue" label="Revenue Analysis" active={pathname === '/dashboard/analytics/revenue'} />
-                                <NavItem href="/dashboard/performance" label="Performance Board" active={pathname === '/dashboard/performance'} />
-                                <NavItem href="/dashboard/staff" label="Staff Overview" active={pathname === '/dashboard/staff'} />
-                                <NavItem href="/dashboard/staff/hr" label="HR & Payroll" active={pathname === '/dashboard/staff/hr'} />
-                                <NavItem href="/dashboard/settings/pricing" label="Price List" active={pathname === '/dashboard/settings/pricing'} />
-                                <NavItem href="/dashboard/audit" label="Audit Log" active={pathname === '/dashboard/audit'} />
+                                <NavItem href="/dashboard/analytics/revenue" label="Revenue Analysis" active={pathname === '/dashboard/analytics/revenue'} onClick={() => setIsSidebarOpen(false)} />
+                                <NavItem href="/dashboard/performance" label="Performance Board" active={pathname === '/dashboard/performance'} onClick={() => setIsSidebarOpen(false)} />
+                                <NavItem href="/dashboard/staff" label="Staff Overview" active={pathname === '/dashboard/staff'} onClick={() => setIsSidebarOpen(false)} />
+                                <NavItem href="/dashboard/staff/hr" label="HR & Payroll" active={pathname === '/dashboard/staff/hr'} onClick={() => setIsSidebarOpen(false)} />
+                                <NavItem href="/dashboard/settings/pricing" label="Price List" active={pathname === '/dashboard/settings/pricing'} onClick={() => setIsSidebarOpen(false)} />
+                                <NavItem href="/dashboard/audit" label="Audit Log" active={pathname === '/dashboard/audit'} onClick={() => setIsSidebarOpen(false)} />
                             </>
                         )}
 
-                        <NavItem href="/dashboard/my-report" label="My Work Log" active={pathname === '/dashboard/my-report'} />
-                        <NavItem href="/dashboard/settings" label="Account Settings" active={pathname === '/dashboard/settings'} />
+                        <NavItem href="/dashboard/my-report" label="My Work Log" active={pathname === '/dashboard/my-report'} onClick={() => setIsSidebarOpen(false)} />
+                        <NavItem href="/dashboard/settings" label="Account Settings" active={pathname === '/dashboard/settings'} onClick={() => setIsSidebarOpen(false)} />
                     </nav>
 
                     <div className="mt-auto space-y-4">
@@ -106,11 +126,19 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
             </aside>
 
             {/* Main Content */}
-            <main className="flex-1 lg:ml-64 min-h-screen transition-all duration-300">
-                <header className="sticky top-0 z-30 flex h-16 items-center border-b border-slate-200 bg-white/80 px-8 backdrop-blur-md">
-                    <h1 className="text-lg font-semibold text-slate-800 uppercase tracking-tight">Divine Favor Hospital Management</h1>
+            <main className="flex-1 lg:ml-72 min-h-screen transition-all duration-300">
+                <header className="sticky top-0 z-30 flex h-20 items-center justify-between border-b border-slate-200 bg-white/80 px-4 md:px-8 backdrop-blur-md">
+                    <div className="flex items-center gap-4">
+                        <button 
+                            onClick={() => setIsSidebarOpen(true)}
+                            className="lg:hidden p-3 text-slate-600 hover:bg-slate-100 rounded-2xl transition-all"
+                        >
+                            <Menu size={24} />
+                        </button>
+                        <h1 className="text-sm md:text-lg font-black text-slate-900 uppercase tracking-tighter">Divine Favor <span className="text-primary">Hospital Management</span></h1>
+                    </div>
                 </header>
-                <div className="p-8">
+                <div className="p-4 md:p-8">
                     {children}
                 </div>
             </main >
@@ -118,16 +146,17 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
     )
 }
 
-function NavItem({ href, label, active = false }: { href: string; label: string; active?: boolean }) {
+function NavItem({ href, label, active = false, onClick }: { href: string; label: string; active?: boolean; onClick?: () => void }) {
     return (
         <Link
             href={href}
-            className={`flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium transition-all ${active
-                ? "bg-primary text-primary-foreground shadow-lg shadow-primary/20"
-                : "text-slate-600 hover:bg-slate-100 hover:text-slate-900 focus:bg-slate-100"
+            onClick={onClick}
+            className={`flex items-center gap-4 rounded-2xl px-5 py-4 text-sm font-bold transition-all ${active
+                ? "bg-slate-900 text-white shadow-xl shadow-slate-200 translate-x-1"
+                : "text-slate-500 hover:bg-slate-50 hover:text-slate-900"
                 }`}
         >
-            <span className="text-xs font-bold uppercase tracking-widest">{label}</span>
+            <span className="text-[10px] uppercase tracking-[0.2em]">{label}</span>
         </Link>
     )
 }
