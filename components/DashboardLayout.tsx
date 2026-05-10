@@ -15,7 +15,15 @@ interface DashboardLayoutProps {
 export function DashboardLayout({ children }: DashboardLayoutProps) {
     const { user, logout, isLoading } = useAuth()
     const pathname = usePathname()
-    const [isSidebarOpen, setIsSidebarOpen] = React.useState(false)
+    // Sidebar open by default on large screens, closed on mobile
+    const [isSidebarOpen, setIsSidebarOpen] = React.useState(true)
+
+    // Handle initial mobile state
+    React.useEffect(() => {
+        if (window.innerWidth < 1024) {
+            setIsSidebarOpen(false)
+        }
+    }, [])
 
     if (isLoading) return null
     if (!user) return null
@@ -34,7 +42,7 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
             )}
 
             {/* Sidebar */}
-            <aside className={`fixed left-0 top-0 z-50 h-screen w-72 border-r border-slate-200 bg-white shadow-2xl transition-transform duration-300 ease-in-out lg:translate-x-0 ${
+            <aside className={`fixed left-0 top-0 z-50 h-screen w-72 border-r border-slate-200 bg-white shadow-2xl transition-transform duration-300 ease-in-out ${
                 isSidebarOpen ? 'translate-x-0' : '-translate-x-full'
             }`}>
                 <div className="h-full flex flex-col px-4 py-8">
@@ -42,7 +50,7 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
                         <Logo />
                         <button 
                             onClick={() => setIsSidebarOpen(false)}
-                            className="lg:hidden p-2 text-slate-400 hover:text-slate-900 hover:bg-slate-100 rounded-2xl transition-all"
+                            className="p-2 text-slate-400 hover:text-slate-900 hover:bg-slate-100 rounded-2xl transition-all"
                         >
                             <X size={20} />
                         </button>
@@ -126,15 +134,19 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
             </aside>
 
             {/* Main Content */}
-            <main className="flex-1 lg:ml-72 min-h-screen transition-all duration-300">
+            <main className={`flex-1 min-h-screen transition-all duration-300 ${
+                isSidebarOpen ? 'lg:ml-72' : 'ml-0'
+            }`}>
                 <header className="sticky top-0 z-30 flex h-20 items-center justify-between border-b border-slate-200 bg-white/80 px-4 md:px-8 backdrop-blur-md">
                     <div className="flex items-center gap-4">
-                        <button 
-                            onClick={() => setIsSidebarOpen(true)}
-                            className="lg:hidden p-3 text-slate-600 hover:bg-slate-100 rounded-2xl transition-all"
-                        >
-                            <Menu size={24} />
-                        </button>
+                        {!isSidebarOpen && (
+                            <button 
+                                onClick={() => setIsSidebarOpen(true)}
+                                className="p-3 text-slate-600 hover:bg-slate-100 rounded-2xl transition-all"
+                            >
+                                <Menu size={24} />
+                            </button>
+                        )}
                         <h1 className="text-sm md:text-lg font-black text-slate-900 uppercase tracking-tighter">Divine Favor <span className="text-primary">Hospital Management</span></h1>
                     </div>
                 </header>
