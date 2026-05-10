@@ -72,13 +72,15 @@ export default function RegistrationPage() {
             <div className="max-w-4xl mx-auto space-y-6">
                 <div className="flex items-center justify-between">
                     <div>
-                        <h2 className="text-2xl font-bold text-slate-900 tracking-tight">Patient Registration</h2>
-                        <p className="text-sm text-slate-500">Register a new patient and assign a digital medical folder.</p>
+                        <h2 className="text-2xl font-bold text-slate-900 dark:text-white tracking-tight">Patient Registration</h2>
+                        <p className="text-sm text-slate-500 dark:text-slate-400">Register a new patient and assign a digital medical folder.</p>
                     </div>
                 </div>
 
                 {message.text && (
-                    <div className={`p-4 rounded-xl border font-bold text-sm ${message.type === 'success' ? 'bg-teal-50 border-teal-100 text-teal-700' : 'bg-red-50 border-red-100 text-red-700'
+                    <div className={`p-4 rounded-xl border font-bold text-sm ${message.type === 'success' 
+                        ? 'bg-teal-50 border-teal-100 text-teal-700 dark:bg-teal-900/20 dark:border-teal-900/30 dark:text-teal-400' 
+                        : 'bg-red-50 border-red-100 text-red-700 dark:bg-red-900/20 dark:border-red-900/30 dark:text-red-400'
                         }`}>
                         {message.text}
                     </div>
@@ -115,13 +117,13 @@ export default function RegistrationPage() {
                                 value={formData.dateOfBirth}
                                 onChange={handleChange}
                             />
-                            <div className="space-y-1.5">
-                                <label className="text-sm font-medium text-slate-700">Gender</label>
+                             <div className="space-y-1.5">
+                                <label className="text-sm font-medium text-slate-700 dark:text-slate-300">Gender</label>
                                 <select
                                     name="gender"
                                     value={formData.gender}
                                     onChange={handleChange}
-                                    className="flex h-11 w-full rounded-xl border border-border bg-background px-3 py-2 text-sm focus:ring-2 focus:ring-primary"
+                                    className="flex h-11 w-full rounded-xl border border-border bg-background px-3 py-2 text-sm focus:ring-2 focus:ring-primary text-slate-900 dark:text-white"
                                 >
                                     <option>Male</option>
                                     <option>Female</option>
@@ -137,7 +139,7 @@ export default function RegistrationPage() {
                             <CardDescription>Optional insurance details for automated billing.</CardDescription>
                         </CardHeader>
                         <CardContent className="space-y-4">
-                            <div className="flex items-center gap-4 p-4 rounded-xl bg-slate-50 border border-slate-200">
+                            <div className="flex items-center gap-4 p-4 rounded-xl bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800">
                                 <input
                                     type="checkbox"
                                     name="hasInsurance"
@@ -145,7 +147,7 @@ export default function RegistrationPage() {
                                     onChange={handleChange}
                                     className="h-4 w-4 rounded border-slate-300 text-primary focus:ring-primary"
                                 />
-                                <span className="text-sm font-medium text-slate-700">Patient has Insurance (NHIS / Private)</span>
+                                <span className="text-sm font-medium text-slate-700 dark:text-slate-300">Patient has Insurance (NHIS / Private)</span>
                             </div>
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <Input

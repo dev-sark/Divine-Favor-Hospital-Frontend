@@ -14,7 +14,23 @@
   --card: #ffffff;
   --card-foreground: #0f172a;
   --border: #e2e8f0;
-  --radius: 0.75rem;
+  --radius: 1rem;
+}
+
+.dark {
+  --background: #020617;
+  --foreground: #f8fafc;
+  --primary: #14b8a6;
+  --primary-foreground: #020617;
+  --secondary: #0f172a;
+  --secondary-foreground: #f8fafc;
+  --muted: #0f172a;
+  --muted-foreground: #94a3b8;
+  --accent: #0d9488;
+  --accent-foreground: #ffffff;
+  --card: #0f172a;
+  --card-foreground: #f8fafc;
+  --border: #1e293b;
 }
 
 @theme inline {
@@ -54,10 +70,10 @@ body {
     background: transparent;
   }
   .custom-scrollbar::-webkit-scrollbar-thumb {
-    background: #f1f5f9;
+    background: var(--border);
     border-radius: 10px;
   }
   .custom-scrollbar:hover::-webkit-scrollbar-thumb {
-    background: #e2e8f0;
+    background: var(--muted-foreground);
   }
 }
