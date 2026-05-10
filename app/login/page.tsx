@@ -9,7 +9,12 @@ import { useAuth } from "@/providers/AuthContext"
 import { authApi } from "@/lib/api"
 import Link from "next/link"
 
+import { useTheme } from "@/providers/ThemeContext"
+import { Sun, Moon, ArrowLeft } from "lucide-react"
+
 export default function LoginPage() {
+    const { theme, toggleTheme } = useTheme()
+    const isDarkMode = theme === 'dark'
     const [isLoading, setIsLoading] = React.useState(false)
     const [error, setError] = React.useState("")
     const [username, setUsername] = React.useState("")
@@ -32,23 +37,31 @@ export default function LoginPage() {
     }
 
     return (
-        <div className="flex min-h-screen items-center justify-center bg-slate-50 p-4">
+        <div className="flex min-h-screen items-center justify-center bg-background p-4 transition-colors duration-300">
             <Link href="/" className="absolute top-8 left-8 text-sm font-semibold text-primary hover:underline flex items-center gap-2">
-                &larr; Back to Home
+                <ArrowLeft size={16} /> Back to Home
             </Link>
+            
+            <button 
+                onClick={toggleTheme}
+                className="absolute top-8 right-8 p-3 text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-2xl transition-all"
+            >
+                {isDarkMode ? <Sun size={20} /> : <Moon size={20} />}
+            </button>
+
             <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
                 <div className="absolute top-[-10%] left-[-10%] h-[40%] w-[40%] rounded-full bg-primary/5 blur-3xl" />
                 <div className="absolute bottom-[-10%] right-[-10%] h-[40%] w-[40%] rounded-full bg-primary/10 blur-3xl" />
             </div>
 
-            <Card className="z-10 w-full max-w-md border-none shadow-xl ring-1 ring-slate-200">
+            <Card className="z-10 w-full max-w-md border-none shadow-2xl ring-1 ring-slate-200 dark:ring-slate-800">
                 <CardHeader className="space-y-4 pb-8 text-center">
                     <div className="flex justify-center">
                         <Logo />
                     </div>
                     <div className="space-y-1">
-                        <CardTitle className="text-xl font-bold text-slate-900">Sign in to HMS</CardTitle>
-                        <CardDescription className="text-slate-500">
+                        <CardTitle className="text-xl font-bold text-slate-900 dark:text-white">Sign in to HMS</CardTitle>
+                        <CardDescription className="text-slate-500 dark:text-slate-400">
                             Enter your credentials to access the portal.
                         </CardDescription>
                     </div>
@@ -56,7 +69,7 @@ export default function LoginPage() {
                 <CardContent>
                     <form onSubmit={onSubmit} className="space-y-4">
                         {error && (
-                            <div className="p-3 text-xs font-bold text-red-600 bg-red-50 rounded-xl border border-red-100 animate-in fade-in zoom-in duration-300">
+                            <div className="p-3 text-xs font-bold text-red-600 bg-red-50 dark:bg-red-900/20 rounded-xl border border-red-100 dark:border-red-900/30 animate-in fade-in zoom-in duration-300">
                                 {error}
                             </div>
                         )}
@@ -84,11 +97,11 @@ export default function LoginPage() {
                         </Button>
                     </form>
                 </CardContent>
-                <CardFooter className="flex flex-col space-y-4 border-t border-slate-100 bg-slate-50/50 p-6 rounded-b-2xl">
-                    <p className="text-xs text-center text-slate-500 font-medium">
+                <CardFooter className="flex flex-col space-y-4 border-t border-slate-100 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-900/50 p-6 rounded-b-2xl">
+                    <p className="text-xs text-center text-slate-500 dark:text-slate-400 font-medium">
                         Managed by Divine Favour IT Support
                     </p>
-                    <div className="text-[10px] text-center font-bold uppercase tracking-wider text-slate-400">
+                    <div className="text-[10px] text-center font-bold uppercase tracking-wider text-slate-400 dark:text-slate-600">
                         Secure Role-Based Access Gate
                     </div>
                 </CardFooter>

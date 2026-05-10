@@ -5,6 +5,7 @@ import { Logo } from "@/components/ui/Logo"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { useAuth } from "@/providers/AuthContext"
+import { useTheme } from "@/providers/ThemeContext"
 import { Button } from "./ui/Button"
 import { Menu, X, LogOut, Sun, Moon } from "lucide-react"
 
@@ -14,35 +15,19 @@ interface DashboardLayoutProps {
 
 export function DashboardLayout({ children }: DashboardLayoutProps) {
     const { user, logout, isLoading } = useAuth()
+    const { theme, toggleTheme } = useTheme()
     const pathname = usePathname()
     // Sidebar open by default on large screens, closed on mobile
     const [isSidebarOpen, setIsSidebarOpen] = React.useState(true)
-    const [isDarkMode, setIsDarkMode] = React.useState(false)
 
-    // Handle initial mobile state and theme
+    const isDarkMode = theme === 'dark'
+
+    // Handle initial mobile state
     React.useEffect(() => {
         if (window.innerWidth < 1024) {
             setIsSidebarOpen(false)
         }
-
-        const savedTheme = localStorage.getItem('theme')
-        if (savedTheme === 'dark') {
-            setIsDarkMode(true)
-            document.documentElement.classList.add('dark')
-        }
     }, [])
-
-    const toggleTheme = () => {
-        if (isDarkMode) {
-            document.documentElement.classList.remove('dark')
-            localStorage.setItem('theme', 'light')
-            setIsDarkMode(false)
-        } else {
-            document.documentElement.classList.add('dark')
-            localStorage.setItem('theme', 'dark')
-            setIsDarkMode(true)
-        }
-    }
 
     if (isLoading) return null
     if (!user) return null
@@ -51,7 +36,7 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
     const userName = user.name
 
     return (
-        <div className="flex min-h-screen bg-slate-50">
+        <div className="flex min-h-screen bg-background text-foreground transition-colors duration-300">
             {/* Sidebar Overlay for Mobile */}
             {isSidebarOpen && (
                 <div 
@@ -153,7 +138,7 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
             </aside>
 
             {/* Main Content */}
-            <main className={`flex-1 min-h-screen transition-all duration-300 bg-slate-50 dark:bg-slate-950 ${
+            <main className={`flex-1 min-h-screen transition-all duration-300 ${
                 isSidebarOpen ? 'lg:ml-72' : 'ml-0'
             }`}>
                 <header className="sticky top-0 z-30 flex h-20 items-center justify-between border-b border-slate-200 dark:border-slate-800 bg-white/80 dark:bg-slate-950/80 px-4 md:px-8 backdrop-blur-md">
