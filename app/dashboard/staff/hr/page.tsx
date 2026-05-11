@@ -7,6 +7,7 @@ import { hrApi, staffApi } from "@/lib/api"
 import { useAuth } from "@/providers/AuthContext"
 import { Users, Calendar, Banknote, ShieldCheck, Zap, Briefcase, Award, TrendingUp } from "lucide-react"
 import { Button } from "@/components/ui/Button"
+import { useToast } from "@/providers/ToastContext"
 
 export default function HRDashboard() {
     const { user } = useAuth()
@@ -14,6 +15,7 @@ export default function HRDashboard() {
     const [selectedDate, setSelectedDate] = React.useState(new Date().toISOString().split('T')[0])
     const [shifts, setShifts] = React.useState<any[]>([])
     const [isLoading, setIsLoading] = React.useState(true)
+    const { success, error } = useToast()
 
     // Payroll state
     const [processingId, setProcessingId] = React.useState<number | null>(null)
@@ -52,8 +54,9 @@ export default function HRDashboard() {
                 baseSalary: staffUser.baseSalary || 2000 // Default if not set
             })
             setPayrollResult(result)
+            success(`Merits calculated for ${staffUser.username}.`, "Payroll Engine")
         } catch (err) {
-            alert("Failed to calculate merits.")
+            error("Failed to calculate merits.", "System Error")
         } finally {
             setProcessingId(null)
         }
@@ -62,10 +65,10 @@ export default function HRDashboard() {
     const handlePay = async (id: number) => {
         try {
             await hrApi.pay(id, user?.name || "Admin")
-            alert("Payment Disbursed Successfully!")
+            success("Payment Disbursed Successfully!", "Financial Sync")
             setPayrollResult(null)
         } catch (err) {
-            alert("Payment failed.")
+            error("Payment failed.", "Disbursement Error")
         }
     }
 

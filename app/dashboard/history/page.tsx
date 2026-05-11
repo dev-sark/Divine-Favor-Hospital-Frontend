@@ -6,6 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { Button } from "@/components/ui/Button"
 import { patientsApi, visitsApi, apiRequest } from "@/lib/api"
 import { Search, User, Phone, Calendar, Activity } from "lucide-react"
+import { useToast } from "@/providers/ToastContext"
 
 export default function HistoryPage() {
     const [patients, setPatients] = React.useState<any[]>([])
@@ -16,6 +17,7 @@ export default function HistoryPage() {
     const [expandedPatient, setExpandedPatient] = React.useState<any>(null)
     const [activeHistory, setActiveHistory] = React.useState<any[]>([])
     const [isLoadingHistory, setIsLoadingHistory] = React.useState(false)
+    const { success, error } = useToast()
 
     const fetchPatients = async () => {
         setIsLoading(true)
@@ -29,7 +31,7 @@ export default function HistoryPage() {
             }
         } catch (error: any) {
             console.error("Failed to fetch patients", error)
-            alert("Error loading directory: " + error.message)
+            error("Error loading directory: " + error.message, "System Error")
         } finally {
             setIsLoading(false)
         }
@@ -206,11 +208,11 @@ export default function HistoryPage() {
                                                                                     weight: target.weight.value,
                                                                                     status: "WAITING_FOR_DOCTOR"
                                                                                 });
-                                                                                alert("Success: Patient checked in and sent to doctor queue.");
+                                                                                success("Patient checked in and sent to doctor queue.", "Check-in Complete");
                                                                                 handleViewHistory(patient); // Refresh list
                                                                                 e.currentTarget.reset();
                                                                             } catch (err) {
-                                                                                alert("Failed to log visit. Connect to IT support.");
+                                                                                error("Failed to log visit. Connect to IT support.", "Clinical Error");
                                                                             }
                                                                         }}>
                                                                             <div className="grid grid-cols-2 gap-3">
@@ -261,9 +263,9 @@ export default function HistoryPage() {
                                                                                             fullName: patient.fullName,
                                                                                             telephone: patient.telephone
                                                                                         })
-                                                                                        alert("Profile updated!")
+                                                                                        success("Profile updated successfully!", "Demographics Sync")
                                                                                     } catch (err) {
-                                                                                        alert("Failed to update.")
+                                                                                        error("Failed to update patient profile.", "Data Error")
                                                                                     }
                                                                                 }}
                                                                             >
