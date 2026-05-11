@@ -55,6 +55,7 @@ export default function SettingsPage() {
             return
         }
 
+        try {
             await authApi.changePassword({
                 oldPassword: formData.oldPassword,
                 newPassword: formData.newPassword
