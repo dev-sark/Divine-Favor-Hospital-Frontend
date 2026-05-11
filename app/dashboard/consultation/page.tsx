@@ -5,10 +5,11 @@ import { DashboardLayout } from "@/components/DashboardLayout"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from "@/components/ui/Card"
 import { Button } from "@/components/ui/Button"
 import { Input } from "@/components/ui/Input"
-import { patientsApi, visitsApi, recordsApi, labApi, billingApi, servicesApi, wardApi } from "@/lib/api"
+import { patientsApi, visitsApi, recordsApi, labApi, billingApi, servicesApi, wardApi, analyticsApi } from "@/lib/api"
 import { COMMON_DIAGNOSES, COMMON_DRUGS } from "@/lib/constants"
 import { useAuth } from "@/providers/AuthContext"
 import { useRouter } from "next/navigation"
+import { ClipboardList, Pill, Stethoscope, Activity, Clock } from "lucide-react"
 
 export default function ConsultationPage() {
     const { user } = useAuth()
@@ -18,7 +19,8 @@ export default function ConsultationPage() {
     const [activePatient, setActivePatient] = React.useState<any>(null)
     const [activeVisit, setActiveVisit] = React.useState<any>(null)
     const [history, setHistory] = React.useState<any[]>([])
-    const [activeTab, setActiveTab] = React.useState<"current" | "history">("current")
+    const [timeline, setTimeline] = React.useState<any[]>([])
+    const [activeTab, setActiveTab] = React.useState<"current" | "history" | "timeline">("current")
 
     React.useEffect(() => {
         if (user && user.role !== 'DOCTOR' && user.role !== 'ADMIN') {
@@ -122,10 +124,14 @@ export default function ConsultationPage() {
         if (visit.patient?.id) {
             setIsHistoryLoading(true)
             try {
-                const historyData = await recordsApi.getRecordsByPatient(visit.patient.id)
+                const [historyData, timelineData] = await Promise.all([
+                    recordsApi.getRecordsByPatient(visit.patient.id),
+                    analyticsApi.getHandoverTimeline(visit.id)
+                ])
                 setHistory(historyData || [])
+                setTimeline(timelineData || [])
             } catch (err) {
-                console.error("Failed to load history", err)
+                console.error("Failed to load clinical context", err)
             } finally {
                 setIsHistoryLoading(false)
             }
@@ -242,8 +248,9 @@ export default function ConsultationPage() {
                                     </div>
                                 </div>
                                 <div className="flex bg-slate-100 p-1 rounded-xl">
-                                    <button onClick={() => setActiveTab("current")} className={`px-6 py-2 rounded-lg text-sm font-bold transition-all ${activeTab === 'current' ? "bg-white text-indigo-600 shadow-sm" : "text-slate-500"}`}>Active Consultation</button>
-                                    <button onClick={() => setActiveTab("history")} className={`px-6 py-2 rounded-lg text-sm font-bold transition-all ${activeTab === 'history' ? "bg-white text-indigo-600 shadow-sm" : "text-slate-500"}`}>History ({history.length})</button>
+                                    <button onClick={() => setActiveTab("current")} className={`px-4 py-2 rounded-lg text-[10px] font-black uppercase tracking-widest transition-all ${activeTab === 'current' ? "bg-white text-indigo-600 shadow-sm" : "text-slate-500"}`}>Consultation</button>
+                                    <button onClick={() => setActiveTab("timeline")} className={`px-4 py-2 rounded-lg text-[10px] font-black uppercase tracking-widest transition-all ${activeTab === 'timeline' ? "bg-white text-emerald-600 shadow-sm" : "text-slate-500"}`}>Handover Timeline</button>
+                                    <button onClick={() => setActiveTab("history")} className={`px-4 py-2 rounded-lg text-[10px] font-black uppercase tracking-widest transition-all ${activeTab === 'history' ? "bg-white text-indigo-600 shadow-sm" : "text-slate-500"}`}>History ({history.length})</button>
                                 </div>
                             </div>
 
@@ -388,6 +395,46 @@ export default function ConsultationPage() {
                                         )}
                                     </CardFooter>
                                 </Card>
+                            ) : activeTab === 'timeline' ? (
+                                <div className="p-10 bg-white rounded-[40px] border-2 border-emerald-50 min-h-[500px] shadow-sm">
+                                    <div className="flex items-center gap-3 mb-8">
+                                        <div className="h-10 w-10 bg-emerald-100 rounded-2xl flex items-center justify-center text-emerald-600">
+                                            <ClipboardList className="w-5 h-5" />
+                                        </div>
+                                        <div>
+                                            <h3 className="font-black text-slate-900 uppercase tracking-tighter">Visit Handover Timeline</h3>
+                                            <p className="text-[10px] text-slate-500 font-bold uppercase tracking-widest">Live Clinical Activity Feed</p>
+                                        </div>
+                                    </div>
+                                    
+                                    <div className="relative pl-8 border-l-2 border-emerald-100 space-y-12">
+                                        {timeline.length === 0 ? (
+                                            <p className="text-center py-20 text-slate-400 italic text-xs">No clinical logs found for this visit yet.</p>
+                                        ) : (
+                                            timeline.map((log: any, idx: number) => (
+                                                <div key={idx} className="relative">
+                                                    <div className="absolute -left-[41px] top-0 h-4 w-4 rounded-full bg-white border-4 border-emerald-500 shadow-sm" />
+                                                    <div className="space-y-1">
+                                                        <div className="flex items-center gap-2">
+                                                            <span className="text-[10px] font-black text-emerald-600 uppercase tracking-widest bg-emerald-50 px-2 py-0.5 rounded">
+                                                                {log.action}
+                                                            </span>
+                                                            <span className="text-[10px] font-bold text-slate-400">
+                                                                {new Date(log.timestamp).toLocaleTimeString()}
+                                                            </span>
+                                                        </div>
+                                                        <p className="text-sm font-bold text-slate-800 leading-tight">
+                                                            {log.details}
+                                                        </p>
+                                                        <p className="text-[10px] text-slate-500 italic font-medium">
+                                                            Recorded by: <span className="text-slate-900 font-bold">{log.user?.username || 'System'}</span>
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                            ))
+                                        )}
+                                    </div>
+                                </div>
                             ) : (
                                 <div className="p-8 bg-white rounded-3xl border min-h-[400px]">
                                     <h3 className="font-bold mb-4">Past Records</h3>

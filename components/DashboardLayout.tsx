@@ -40,13 +40,13 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
             {/* Sidebar Overlay for Mobile */}
             {isSidebarOpen && (
                 <div 
-                    className="fixed inset-0 z-40 bg-slate-900/50 backdrop-blur-sm lg:hidden transition-opacity"
+                    className="fixed inset-0 z-40 bg-slate-900/50 backdrop-blur-sm lg:hidden transition-opacity print:hidden"
                     onClick={() => setIsSidebarOpen(false)}
                 />
             )}
 
             {/* Sidebar */}
-            <aside className={`fixed left-0 top-0 z-50 h-screen w-72 border-r border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 shadow-2xl transition-transform duration-300 ease-in-out ${
+            <aside className={`fixed left-0 top-0 z-50 h-screen w-72 border-r border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 shadow-2xl transition-transform duration-300 ease-in-out print:hidden ${
                 isSidebarOpen ? 'translate-x-0' : '-translate-x-full'
             }`}>
                 <div className="h-full flex flex-col px-4 py-8">
@@ -140,8 +140,8 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
             {/* Main Content */}
             <main className={`flex-1 min-h-screen transition-all duration-300 ${
                 isSidebarOpen ? 'lg:ml-72' : 'ml-0'
-            }`}>
-                <header className="sticky top-0 z-30 flex h-20 items-center justify-between border-b border-slate-200 dark:border-slate-800 bg-white/80 dark:bg-slate-950/80 px-4 md:px-8 backdrop-blur-md">
+            } print:ml-0`}>
+                <header className="sticky top-0 z-30 flex h-20 items-center justify-between border-b border-slate-200 dark:border-slate-800 bg-white/80 dark:bg-slate-950/80 px-4 md:px-8 backdrop-blur-md print:hidden">
                     <div className="flex items-center gap-4">
                         {!isSidebarOpen && (
                             <button 

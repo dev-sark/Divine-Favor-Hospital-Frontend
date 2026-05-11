@@ -99,6 +99,7 @@ export const analyticsApi = {
     getRevenueReport: (start: string, end: string) => apiRequest(`/analytics/revenue?start=${start}&end=${end}`),
     getMyActivity: (userId: number, start: string, end: string) => apiRequest(`/analytics/my-activity?userId=${userId}&start=${start}&end=${end}`),
     getDiseaseTrends: () => apiRequest('/analytics/disease-trends'),
+    getHandoverTimeline: (visitId: number) => apiRequest(`/analytics/handover-timeline/${visitId}`),
 };
 
 export const auditApi = {

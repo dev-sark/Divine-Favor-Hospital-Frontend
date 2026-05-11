@@ -34,9 +34,10 @@ export default function BillingPage() {
         setIsProcessing(true)
         try {
             await billingApi.payBill(selectedBill.id)
-            setSelectedBill(null)
+            // Update local state instead of clearing, so receipt stays visible for printing
+            setSelectedBill({ ...selectedBill, status: 'PAID', paidAt: new Date().toISOString() })
             fetchUnpaid()
-            alert("Payment successful! Transaction recorded.")
+            alert("Payment successful! Official receipt generated.")
         } catch (err) {
             alert("Failed to process payment")
         } finally {
@@ -66,7 +67,7 @@ export default function BillingPage() {
 
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
                     {/* Unpaid Bills List */}
-                    <Card className="lg:col-span-2">
+                    <Card className="lg:col-span-2 print:hidden">
                         <CardHeader className="border-b border-slate-50">
                             <div className="relative">
                                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
@@ -122,10 +123,10 @@ export default function BillingPage() {
                     </Card>
 
                     {/* Payment Receipt / Processor */}
-                    <div className="space-y-6">
+                    <div className="space-y-6 print:col-span-3 print:max-w-2xl print:mx-auto print:w-full">
                         {selectedBill ? (
                             <div className="space-y-6">
-                                <Card className="border-primary/20 shadow-xl shadow-primary/5 sticky top-6 overflow-hidden print:shadow-none print:border-none">
+                                <Card className="border-primary/20 shadow-xl shadow-primary/5 sticky top-6 overflow-hidden print:shadow-none print:border-none print:static">
                                     {/* Header / Receipt Branding */}
                                     <div className="bg-primary p-6 text-white text-center print:bg-white print:text-slate-900 print:text-left print:p-0 print:mb-8">
                                         <div className="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-4 backdrop-blur-sm print:hidden">
@@ -135,8 +136,15 @@ export default function BillingPage() {
                                             <h1 className="text-2xl font-black uppercase tracking-tighter ring-2 ring-slate-900 px-3 inline-block">DIVINE FAVOR HOSPITAL</h1>
                                             <p className="text-[10px] font-bold mt-1">Official Medical Revenue Receipt</p>
                                         </div>
-                                        <p className="text-xs font-black opacity-80 uppercase tracking-widest">Grand Total Due</p>
+                                        <p className="text-xs font-black opacity-80 uppercase tracking-widest">
+                                            {selectedBill.status === 'PAID' ? 'Total Amount Paid' : 'Grand Total Due'}
+                                        </p>
                                         <h3 className="text-4xl font-black mt-1">GH₵ {selectedBill.totalAmount.toFixed(2)}</h3>
+                                        {selectedBill.status === 'PAID' && (
+                                            <div className="mt-2 bg-white/20 inline-block px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest animate-bounce">
+                                                Transaction Settled & Cleared
+                                            </div>
+                                        )}
                                     </div>
 
                                     <CardContent className="p-6 space-y-6 print:p-0">
@@ -149,7 +157,11 @@ export default function BillingPage() {
                                             <div className="text-right">
                                                 <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1">Receipt Number</p>
                                                 <p className="text-xs font-mono font-bold text-slate-700">#INV-2026-{selectedBill.id}</p>
-                                                <p className="text-[10px] font-bold text-slate-500">{new Date(selectedBill.createdAt).toLocaleDateString()}</p>
+                                                <p className="text-[10px] font-bold text-slate-500">
+                                                    {selectedBill.status === 'PAID' 
+                                                        ? `Paid on: ${new Date(selectedBill.paidAt).toLocaleDateString()}` 
+                                                        : `Issued: ${new Date(selectedBill.createdAt).toLocaleDateString()}`}
+                                                </p>
                                             </div>
                                         </div>
 
@@ -192,10 +204,14 @@ export default function BillingPage() {
                                         <div className="pt-6 flex flex-col gap-3 print:hidden">
                                             <button
                                                 onClick={handleProcessPayment}
-                                                disabled={isProcessing}
-                                                className="w-full py-4 bg-primary text-white rounded-2xl font-black text-sm shadow-lg shadow-primary/30 hover:scale-[1.02] active:scale-95 transition-all flex items-center justify-center gap-2"
+                                                disabled={isProcessing || selectedBill.status === 'PAID'}
+                                                className={`w-full py-4 rounded-2xl font-black text-sm shadow-lg transition-all flex items-center justify-center gap-2 ${
+                                                    selectedBill.status === 'PAID' 
+                                                    ? 'bg-emerald-500 text-white shadow-emerald-100 cursor-default' 
+                                                    : 'bg-primary text-white shadow-primary/30 hover:scale-[1.02] active:scale-95'
+                                                }`}
                                             >
-                                                {isProcessing ? "Recording Payment..." : "Mark as PAID & Settle"}
+                                                {isProcessing ? "Recording Payment..." : selectedBill.status === 'PAID' ? "PAYMENT COLLECTED ✅" : "Mark as PAID & Settle"}
                                             </button>
                                             <button
                                                 onClick={() => window.print()}
@@ -219,6 +235,14 @@ export default function BillingPage() {
                         )}
                     </div>
                 </div>
+                {/* Print Styling Injection */}
+                <style jsx global>{`
+                    @media print {
+                        body { background: white !important; }
+                        .active-bill { background: transparent !important; }
+                        @page { margin: 1cm; }
+                    }
+                `}</style>
             </div>
         </DashboardLayout>
     )

@@ -354,13 +354,26 @@ export default function PerformancePage() {
                                                 </div>
                                                 {/* Name */}
                                                 <div className="flex-1 min-w-0">
-                                                    <p className="font-bold text-slate-900 text-sm truncate">{staff.username}</p>
+                                                    <div className="flex items-center gap-2">
+                                                        <p className="font-bold text-slate-900 text-sm truncate">{staff.username}</p>
+                                                        <div className="flex gap-1">
+                                                            {staff.rewards?.map((reward: string) => (
+                                                                <span key={reward} className="px-1.5 py-0.5 rounded-md bg-amber-100 text-amber-700 text-[8px] font-black uppercase tracking-tighter flex items-center gap-1">
+                                                                    <Award className="w-2 h-2" /> {reward}
+                                                                </span>
+                                                            ))}
+                                                        </div>
+                                                    </div>
                                                     <p className={`text-[10px] font-black uppercase tracking-wider ${cfg.color}`}>{cfg.label}</p>
                                                 </div>
                                                 {/* Score */}
                                                 <div className="text-right shrink-0">
                                                     <p className="text-xl font-black text-slate-900">{staff.performanceScore}</p>
-                                                    <p className="text-[10px] font-bold text-slate-400 uppercase">Points</p>
+                                                    <p className="text-[10px] font-bold text-slate-400 uppercase">Impact Score</p>
+                                                </div>
+                                                <div className="text-right shrink-0 px-4 border-l border-slate-100">
+                                                    <p className="text-lg font-black text-indigo-600">{staff.actionCount}</p>
+                                                    <p className="text-[10px] font-bold text-slate-400 uppercase">Patients/Actions</p>
                                                 </div>
                                                 {/* Mini bar */}
                                                 <div className="w-20 h-2 bg-slate-200 rounded-full overflow-hidden shrink-0">
