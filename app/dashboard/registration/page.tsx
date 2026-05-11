@@ -43,7 +43,6 @@ export default function RegistrationPage() {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
         setIsLoading(true)
-        setMessage({ type: '', text: '' })
 
         try {
             const response = await patientsApi.registerPatient(formData)
