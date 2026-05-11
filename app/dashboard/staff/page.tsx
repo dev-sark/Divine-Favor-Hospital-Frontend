@@ -140,6 +140,8 @@ export default function StaffManagementPage() {
                                         <option value="PHARMACIST">Pharmacist</option>
                                         <option value="LAB_TECH">Lab Technician</option>
                                         <option value="RECEPTIONIST">Receptionist</option>
+                                        <option value="ACCOUNTANT">Accountant</option>
+                                        <option value="CASHIER">Cashier</option>
                                         <option value="ADMIN">Administrator</option>
                                     </select>
                                 </div>
@@ -176,8 +178,31 @@ export default function StaffManagementPage() {
                                         staff.map((user) => (
                                             <tr key={user.id} className="group hover:bg-slate-50/50 transition-colors">
                                                 <td className="py-4 pl-2 font-bold text-slate-900">{user.username}</td>
-                                                <td className="py-4 font-mono text-[10px] uppercase font-bold text-slate-500">
-                                                    {user.role}
+                                                <td className="py-4">
+                                                    <select 
+                                                        className="bg-transparent border-none p-0 text-[10px] uppercase font-bold text-slate-500 focus:ring-0 cursor-pointer hover:text-primary transition-colors"
+                                                        value={user.role}
+                                                        onChange={async (e) => {
+                                                            const newRole = e.target.value;
+                                                            if (confirm(`Change ${user.username}'s role to ${newRole}?`)) {
+                                                                try {
+                                                                    await usersApi.updateRole(user.id, newRole);
+                                                                    fetchStaff();
+                                                                } catch (err) {
+                                                                    alert("Failed to update role");
+                                                                }
+                                                            }
+                                                        }}
+                                                    >
+                                                        <option value="DOCTOR">Doctor</option>
+                                                        <option value="NURSE">Nurse</option>
+                                                        <option value="PHARMACIST">Pharmacist</option>
+                                                        <option value="LAB_TECH">Lab Technician</option>
+                                                        <option value="RECEPTIONIST">Receptionist</option>
+                                                        <option value="ACCOUNTANT">Accountant</option>
+                                                        <option value="CASHIER">Cashier</option>
+                                                        <option value="ADMIN">Administrator</option>
+                                                    </select>
                                                 </td>
                                                 <td className="py-4">
                                                     {user.approval ? (

@@ -94,7 +94,7 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
                             <NavItem href="/dashboard/ward" label="Wards & Admissions" active={pathname === '/dashboard/ward'} onClick={() => setIsSidebarOpen(false)} />
                         )}
 
-                        {(role === 'ADMIN' || role === 'ACCOUNTANT') && (
+                        {(role === 'ADMIN' || role === 'ACCOUNTANT' || role === 'CASHIER') && (
                             <NavItem href="/dashboard/billing" label="Billing" active={pathname === '/dashboard/billing'} onClick={() => setIsSidebarOpen(false)} />
                         )}
 

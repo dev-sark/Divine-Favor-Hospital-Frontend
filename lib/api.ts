@@ -44,6 +44,10 @@ export const usersApi = {
         body: JSON.stringify(userData),
     }),
     approveUser: (id: number) => apiRequest(`/users/${id}/approve`, { method: 'PUT' }),
+    updateRole: (id: number, role: string) => apiRequest(`/users/${id}/role`, { 
+        method: 'PUT',
+        body: JSON.stringify({ role })
+    }),
     deleteUser: (id: number) => apiRequest(`/users/${id}`, { method: 'DELETE' }),
 };
 
@@ -114,6 +118,7 @@ export const billingApi = {
     payBill: (billId: number) => apiRequest(`/billing/pay/${billId}`, { method: 'PUT' }),
     getUnpaid: () => apiRequest('/billing/unpaid'),
     getByPatient: (patientId: number) => apiRequest(`/billing/patient/${patientId}`),
+    getByVisit: (visitId: number) => apiRequest(`/billing/visit/${visitId}`),
 };
 
 export const servicesApi = {
