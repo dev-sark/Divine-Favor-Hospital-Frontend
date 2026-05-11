@@ -8,13 +8,14 @@ import { Input } from "@/components/ui/Input"
 import { authApi, auditApi } from "@/lib/api"
 import { KeyRound, ShieldCheck, History, User, Activity, Clock } from "lucide-react"
 import { useAuth } from "@/providers/AuthContext"
+import { useToast } from "@/providers/ToastContext"
 
 export default function SettingsPage() {
     const { user } = useAuth()
     const [isLoading, setIsLoading] = React.useState(false)
     const [auditLogs, setAuditLogs] = React.useState<any[]>([])
     const [isAuditLoading, setIsAuditLoading] = React.useState(false)
-    const [message, setMessage] = React.useState({ type: '', text: '' })
+    const { success, error } = useToast()
     const [activeTab, setActiveTab] = React.useState('password')
     const [formData, setFormData] = React.useState({
         oldPassword: '',
@@ -47,23 +48,21 @@ export default function SettingsPage() {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
         setIsLoading(true)
-        setMessage({ type: '', text: '' })
 
         if (formData.newPassword !== formData.confirmPassword) {
-            setMessage({ type: 'error', text: "New passwords do not match." })
+            error("New passwords do not match.", "Validation Error")
             setIsLoading(false)
             return
         }
 
-        try {
             await authApi.changePassword({
                 oldPassword: formData.oldPassword,
                 newPassword: formData.newPassword
             })
-            setMessage({ type: 'success', text: "Password updated securely." })
+            success("Password updated securely.", "Security Sync")
             setFormData({ oldPassword: '', newPassword: '', confirmPassword: '' })
         } catch (err: any) {
-            setMessage({ type: 'error', text: err.message || "Failed to update password." })
+            error(err.message || "Failed to update password.", "Security Error")
         } finally {
             setIsLoading(false)
         }
@@ -131,11 +130,6 @@ export default function SettingsPage() {
                                         </div>
                                     </CardHeader>
                                     <CardContent className="space-y-4 pt-6">
-                                        {message.text && (
-                                            <div className={`p-3 rounded-lg text-[11px] font-bold ${message.type === 'success' ? 'bg-teal-50 text-teal-700' : 'bg-red-50 text-red-600'}`}>
-                                                {message.text}
-                                            </div>
-                                        )}
 
                                         <div className="space-y-1.5">
                                             <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Current Password</label>

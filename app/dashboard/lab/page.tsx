@@ -5,6 +5,7 @@ import { DashboardLayout } from "@/components/DashboardLayout"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/Card"
 import { labApi } from "@/lib/api"
 import { FlaskConical, Search, CheckCircle, Clock, FileText, User, Calendar } from "lucide-react"
+import { useToast } from "@/providers/ToastContext"
 
 export default function LaboratoryPage() {
     const [pendingOrders, setPendingOrders] = React.useState<any[]>([])
@@ -13,6 +14,7 @@ export default function LaboratoryPage() {
     const [selectedOrder, setSelectedOrder] = React.useState<any>(null)
     const [results, setResults] = React.useState("")
     const [isSaving, setIsSaving] = React.useState(false)
+    const { success, error } = useToast()
 
     const fetchPending = async () => {
         setIsLoading(true)
@@ -35,11 +37,12 @@ export default function LaboratoryPage() {
         setIsSaving(true)
         try {
             await labApi.recordResults(selectedOrder.id, results)
+            success("Test Results finalized and shared with doctor.", "Diagnosis Recorded")
             setSelectedOrder(null)
             setResults("")
             fetchPending()
         } catch (err) {
-            alert("Failed to save results")
+            error("Failed to save results", "Entry Error")
         } finally {
             setIsSaving(false)
         }

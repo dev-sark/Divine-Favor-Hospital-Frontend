@@ -6,6 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { Button } from "@/components/ui/Button"
 import { visitsApi, recordsApi, billingApi } from "@/lib/api"
 import { Pill, User, ClipboardList, Search, RefreshCcw, ShieldCheck } from "lucide-react"
+import { useToast } from "@/providers/ToastContext"
 
 export default function PharmacyPage() {
     const [visits, setVisits] = React.useState<any[]>([])
@@ -16,6 +17,7 @@ export default function PharmacyPage() {
     const [isConfirming, setIsConfirming] = React.useState(false)
     const [drugAmount, setDrugAmount] = React.useState("")
     const [isUpdatingBill, setIsUpdatingBill] = React.useState(false)
+    const { success, error } = useToast()
 
     const fetchData = async () => {
         setIsLoading(true)
@@ -68,9 +70,9 @@ export default function PharmacyPage() {
         setIsUpdatingBill(true)
         try {
             await billingApi.addCharge(selectedRecord.visitId, "PHARMACY", parseFloat(drugAmount))
-            alert("Bill Updated! Patient can now pay at the Cashier.")
+            success("Bill Updated! Patient can now pay at the Cashier.", "Accounts Sync")
         } catch (err) {
-            alert("Failed to update bill. Check if a bill exists for this visit.")
+            error("Failed to update bill. Check if a bill exists for this visit.", "System Error")
         } finally {
             setIsUpdatingBill(false)
         }
@@ -85,12 +87,12 @@ export default function PharmacyPage() {
             // 2. Mark visit as completed
             await visitsApi.updateStatus(selectedRecord.visitId, "COMPLETED");
             
-            alert("Medication Dispensed & Transaction Finalized.");
+            success("Medication Dispensed & Transaction Finalized.", "Inventory Cleared");
             setSelectedRecord(null);
             fetchData();
         } catch (err) {
             console.error(err);
-            alert("Error: Status could not be updated.");
+            error("Error: Status could not be updated.", "Clinical Error");
         } finally {
             setIsConfirming(false);
         }

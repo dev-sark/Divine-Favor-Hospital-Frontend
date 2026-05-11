@@ -6,12 +6,14 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { appointmentApi, patientsApi, staffApi } from "@/lib/api"
 import { Calendar, Clock, UserPlus, Search, CheckCircle, XCircle, MoreVertical, Plus } from "lucide-react"
 import { Button } from "@/components/ui/Button"
+import { useToast } from "@/providers/ToastContext"
 
 export default function AppointmentsPage() {
     const [selectedDate, setSelectedDate] = React.useState(new Date().toISOString().split('T')[0])
     const [appointments, setAppointments] = React.useState<any[]>([])
     const [isLoading, setIsLoading] = React.useState(true)
     const [showForm, setShowForm] = React.useState(false)
+    const { success, error } = useToast()
 
     // Form inputs
     const [patientId, setPatientId] = React.useState("")
@@ -52,11 +54,11 @@ export default function AppointmentsPage() {
                 reason,
                 status: 'SCHEDULED'
             })
-            alert("Appointment Scheduled!")
+            success("Appointment Scheduled!", "Visit Confirmed")
             setShowForm(false)
             fetchData()
         } catch (err) {
-            alert("Booking failed. Please check patient ID.")
+            error("Booking failed. Please check patient ID.", "Access Denied")
         } finally {
             setIsSaving(false)
         }
@@ -65,10 +67,10 @@ export default function AppointmentsPage() {
     const handleCheckIn = async (id: number) => {
         try {
             await appointmentApi.checkIn(id)
-            alert("Patient Checked In! They are now in the Triage queue.")
+            success("Patient Checked In! They are now in the Triage queue.", "Clinical Arrival")
             fetchData()
         } catch (err) {
-            alert("Check-in failed.")
+            error("Check-in failed.", "System Error")
         }
     }
 

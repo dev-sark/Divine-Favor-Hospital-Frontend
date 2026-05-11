@@ -9,6 +9,7 @@ import { patientsApi, visitsApi, recordsApi, labApi, billingApi, servicesApi, wa
 import { COMMON_DIAGNOSES, COMMON_DRUGS } from "@/lib/constants"
 import { useAuth } from "@/providers/AuthContext"
 import { useRouter } from "next/navigation"
+import { useToast } from "@/providers/ToastContext"
 import { ClipboardList, Pill, Stethoscope, Activity, Clock } from "lucide-react"
 
 export default function ConsultationPage() {
@@ -21,6 +22,7 @@ export default function ConsultationPage() {
     const [history, setHistory] = React.useState<any[]>([])
     const [timeline, setTimeline] = React.useState<any[]>([])
     const [activeTab, setActiveTab] = React.useState<"current" | "history" | "timeline">("current")
+    const { success, error: toastError } = useToast()
 
     React.useEffect(() => {
         if (user && user.role !== 'DOCTOR' && user.role !== 'ADMIN') {
@@ -87,13 +89,13 @@ export default function ConsultationPage() {
                 username: user?.name
             })
 
-            alert("Patient Admitted Successfully!")
+            success("Patient Admitted Successfully!", "Ward Arrival")
             setIsAdmitting(false)
             loadData()
             setActiveVisit(null)
             setActivePatient(null)
         } catch (err) {
-            alert("Admission failed. Bed might have been taken.")
+            toastError("Admission failed. Bed might have been taken.", "Logistics Error")
         } finally {
             setIsSubmitting(false)
         }
@@ -164,7 +166,7 @@ export default function ConsultationPage() {
                 insuranceNumber: "" 
             })
 
-            alert("Consultation finalized! Lab requests and Billing generated.")
+            success("Consultation finalized! Lab requests and Billing generated.", "Encounter Complete")
 
             setDiagnosis("")
             setSymptoms("")
@@ -177,7 +179,7 @@ export default function ConsultationPage() {
             loadData()
         } catch (err) {
             console.error("Submission failed", err)
-            alert("Failed to save consultation.")
+            toastError("Failed to save consultation.", "Clinical Error")
         } finally {
             setIsSubmitting(false)
         }

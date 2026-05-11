@@ -10,6 +10,7 @@ import { useRouter } from "next/navigation"
 import { Input } from "@/components/ui/Input"
 
 import { useAuth } from "@/providers/AuthContext"
+import { useToast } from "@/providers/ToastContext"
 
 export default function StaffManagementPage() {
     const { user } = useAuth()
@@ -19,6 +20,7 @@ export default function StaffManagementPage() {
     const [newStaff, setNewStaff] = React.useState({ username: '', password: '', role: 'DOCTOR' })
     const [isSubmitting, setIsSubmitting] = React.useState(false)
     const router = useRouter()
+    const { success, error } = useToast()
 
     const fetchStaff = async () => {
         setIsLoading(true)
@@ -33,7 +35,7 @@ export default function StaffManagementPage() {
         } catch (err: any) {
             console.error("Failed to fetch staff", err)
             if (err.message && err.message.includes("403")) {
-                alert("Unauthorized. Only ADMIN can manage staff.")
+                error("Unauthorized. Only ADMIN can manage staff.", "Access Denied")
                 router.push("/dashboard")
             }
         } finally {
@@ -48,10 +50,10 @@ export default function StaffManagementPage() {
     const handleApprove = async (id: number) => {
         try {
             await usersApi.approveUser(id)
-            alert("Staff approved successfully.")
+            success("Staff approved successfully.", "Access Granted")
             fetchStaff()
         } catch (err) {
-            alert("Failed to approve staff.")
+            error("Failed to approve staff.", "System Error")
         }
     }
 
@@ -59,10 +61,10 @@ export default function StaffManagementPage() {
         if (!confirm("Are you sure you want to delete this staff member?")) return
         try {
             await usersApi.deleteUser(id)
-            alert("Staff deleted.")
+            success("Staff deleted.", "Account Revoked")
             fetchStaff()
         } catch (err) {
-            alert("Failed to delete staff.")
+            error("Failed to delete staff.", "System Error")
         }
     }
 
@@ -71,12 +73,12 @@ export default function StaffManagementPage() {
         setIsSubmitting(true)
         try {
             await usersApi.createStaff(newStaff)
-            alert("Staff registration submitted! Please click 'Approve' below to activate their account.")
+            success("Staff registration submitted! Account is now active.", "Account Ready")
             setNewStaff({ username: '', password: '', role: 'DOCTOR' })
             setIsAddingStaff(false)
             fetchStaff()
         } catch (err: any) {
-            alert(err.message || "Failed to create staff member.")
+            error(err.message || "Failed to create staff member.", "Entry Failed")
         } finally {
             setIsSubmitting(false)
         }
@@ -187,9 +189,10 @@ export default function StaffManagementPage() {
                                                             if (confirm(`Change ${user.username}'s role to ${newRole}?`)) {
                                                                 try {
                                                                     await usersApi.updateRole(user.id, newRole);
+                                                                    success(`${user.username}'s role updated to ${newRole}`, "Permissions Changed");
                                                                     fetchStaff();
                                                                 } catch (err) {
-                                                                    alert("Failed to update role");
+                                                                    error("Failed to update role", "Access Error");
                                                                 }
                                                             }
                                                         }}

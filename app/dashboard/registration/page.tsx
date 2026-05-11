@@ -8,6 +8,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { patientsApi } from "@/lib/api"
 import { useAuth } from "@/providers/AuthContext"
 import { useRouter } from "next/navigation"
+import { useToast } from "@/providers/ToastContext"
 
 export default function RegistrationPage() {
     const { user } = useAuth()
@@ -20,7 +21,7 @@ export default function RegistrationPage() {
     }, [user, router])
 
     const [isLoading, setIsLoading] = React.useState(false)
-    const [message, setMessage] = React.useState({ type: '', text: '' })
+    const { success, error } = useToast()
     const [formData, setFormData] = React.useState({
         fullName: '',
         telephone: '',
@@ -46,10 +47,7 @@ export default function RegistrationPage() {
 
         try {
             const response = await patientsApi.registerPatient(formData)
-            setMessage({
-                type: 'success',
-                text: `Patient registered successfully! Folder Number: ${response.folderNumber}`
-            })
+            success(`Patient registered successfully! Folder Number: ${response.folderNumber}`, "Registration Complete")
             // Reset form
             setFormData({
                 fullName: '',
@@ -61,7 +59,7 @@ export default function RegistrationPage() {
                 insuranceNumber: ''
             })
         } catch (err: any) {
-            setMessage({ type: 'error', text: err.message || "Failed to register patient." })
+            error(err.message || "Failed to register patient.", "Registration Failed")
         } finally {
             setIsLoading(false)
         }
@@ -76,15 +74,6 @@ export default function RegistrationPage() {
                         <p className="text-sm text-slate-500 dark:text-slate-400">Register a new patient and assign a digital medical folder.</p>
                     </div>
                 </div>
-
-                {message.text && (
-                    <div className={`p-4 rounded-xl border font-bold text-sm ${message.type === 'success' 
-                        ? 'bg-teal-50 border-teal-100 text-teal-700 dark:bg-teal-900/20 dark:border-teal-900/30 dark:text-teal-400' 
-                        : 'bg-red-50 border-red-100 text-red-700 dark:bg-red-900/20 dark:border-red-900/30 dark:text-red-400'
-                        }`}>
-                        {message.text}
-                    </div>
-                )}
 
                 <form onSubmit={handleSubmit} className="space-y-6">
                     <Card>

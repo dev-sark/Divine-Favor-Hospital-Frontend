@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import { AuthProvider } from "@/providers/AuthContext";
 import { ThemeProvider } from "@/providers/ThemeContext";
+import { ToastProvider } from "@/providers/ToastContext";
 
 export const metadata: Metadata = {
   title: "Divine Favour Hospital - Zero Paperwork System",
@@ -18,7 +19,9 @@ export default function RootLayout({
       <body className="antialiased bg-background" style={{ fontFamily: "'Inter', 'Segoe UI', system-ui, sans-serif" }}>
         <ThemeProvider>
           <AuthProvider>
-            {children}
+            <ToastProvider>
+              {children}
+            </ToastProvider>
           </AuthProvider>
         </ThemeProvider>
       </body>

@@ -5,6 +5,7 @@ import { DashboardLayout } from "@/components/DashboardLayout"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/Card"
 import { billingApi } from "@/lib/api"
 import { Banknote, Search, CreditCard, Receipt, Clock, User, CheckCircle2, ShieldCheck } from "lucide-react"
+import { useToast } from "@/providers/ToastContext"
 
 export default function BillingPage() {
     const [unpaidBills, setUnpaidBills] = React.useState<any[]>([])
@@ -12,6 +13,7 @@ export default function BillingPage() {
     const [searchTerm, setSearchTerm] = React.useState("")
     const [selectedBill, setSelectedBill] = React.useState<any>(null)
     const [isProcessing, setIsProcessing] = React.useState(false)
+    const { success, error } = useToast()
 
     const fetchUnpaid = async () => {
         setIsLoading(true)
@@ -37,9 +39,9 @@ export default function BillingPage() {
             // Update local state instead of clearing, so receipt stays visible for printing
             setSelectedBill({ ...selectedBill, status: 'PAID', paidAt: new Date().toISOString() })
             fetchUnpaid()
-            alert("Payment successful! Official receipt generated.")
+            success("Payment successful! Official receipt generated.", "Accounts Cleared")
         } catch (err) {
-            alert("Failed to process payment")
+            error("Failed to process payment", "Transaction Error")
         } finally {
             setIsProcessing(false)
         }

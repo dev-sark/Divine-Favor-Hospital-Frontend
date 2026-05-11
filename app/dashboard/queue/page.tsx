@@ -9,6 +9,7 @@ import { Search } from "lucide-react"
 import { useAuth } from "@/providers/AuthContext"
 import { useRouter } from "next/navigation"
 import { VitalsModal } from "@/components/VitalsModal"
+import { useToast } from "@/providers/ToastContext"
 
 export default function QueuePage() {
     const { user } = useAuth()
@@ -16,6 +17,7 @@ export default function QueuePage() {
 
     const [selectedPatient, setSelectedPatient] = React.useState<any>(null)
     const [isModalOpen, setIsModalOpen] = React.useState(false)
+    const { success, error } = useToast()
 
     React.useEffect(() => {
         if (user && user.role !== 'NURSE' && user.role !== 'DOCTOR' && user.role !== 'ADMIN') {
@@ -40,7 +42,7 @@ export default function QueuePage() {
             }
         } catch (err: any) {
             console.error("Failed to fetch patients", err)
-            alert("Error loading patients: " + (err.message || "Unknown error"))
+            error("Error loading patients: " + (err.message || "Unknown error"), "System Error")
         } finally {
             setIsLoading(false)
         }
@@ -60,11 +62,11 @@ export default function QueuePage() {
         setSubmittingId(selectedPatient.id)
         try {
             await visitsApi.saveVitals(selectedPatient.id, vitals)
-            alert(`${selectedPatient.fullName} checked in successfully! Patient moved to Doctor queue.`)
+            success(`${selectedPatient.fullName} checked in successfully! Patient moved to Doctor queue.`, "Check-in Complete")
             fetchPatients()
         } catch (err) {
             console.error(err)
-            alert("Failed to log vitals.")
+            error("Failed to log vitals.", "Clinical Error")
             throw err
         } finally {
             setSubmittingId(null)
