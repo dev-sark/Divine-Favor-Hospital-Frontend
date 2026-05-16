@@ -18,7 +18,7 @@ export function Logo({ className }: { className?: string }) {
                 </svg>
             </div>
             <div className="flex flex-col leading-none">
-                <span className="text-xl font-bold tracking-tight text-slate-900">Divine Favour</span>
+                <span className="text-xl font-bold tracking-tight text-slate-900 dark:text-white">Divine Favour</span>
                 <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-primary">Hospital</span>
             </div>
         </div>

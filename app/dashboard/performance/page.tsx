@@ -48,11 +48,11 @@ function PerformanceBarChart({ data }: { data: any[] }) {
                     </div>
 
                     {/* Bars */}
-                    <div className="flex-1 flex items-end gap-3 h-full border-b border-l border-slate-200 pb-0 relative">
+                    <div className="flex-1 flex items-end gap-3 h-full border-b border-l border-slate-200 dark:border-slate-700 pb-0 relative">
                         {/* Gridlines */}
                         <div className="absolute inset-0 flex flex-col justify-between pointer-events-none">
                             {[0, 0.5, 1].map((_, i) => (
-                                <div key={i} className="border-t border-slate-100 w-full" />
+                                <div key={i} className="border-t border-slate-100 dark:border-slate-800 w-full" />
                             ))}
                         </div>
 
@@ -62,7 +62,7 @@ function PerformanceBarChart({ data }: { data: any[] }) {
                             return (
                                 <div key={staff.id} className="flex-1 flex flex-col items-center gap-1.5 group relative z-10">
                                     {/* Value label on hover */}
-                                    <div className="opacity-0 group-hover:opacity-100 transition-opacity text-xs font-black text-slate-700 absolute -top-6">
+                                    <div className="opacity-0 group-hover:opacity-100 transition-opacity text-xs font-black text-slate-700 dark:text-white absolute -top-6">
                                         {staff.performanceScore} pts
                                     </div>
                                     {/* Bar */}
@@ -130,7 +130,7 @@ function RoleGroupCard({ role, staffList }: { role: string; staffList: any[] }) 
                 </div>
                 <div className="flex-1 min-w-0">
                     <p className={`text-xs font-black uppercase tracking-widest ${cfg.color}`}>{cfg.label}s</p>
-                    <p className="text-2xl font-black text-slate-900 mt-0.5">{total}</p>
+                    <p className="text-2xl font-black text-slate-900 dark:text-white mt-0.5">{total}</p>
                     <p className="text-[10px] text-slate-400 font-medium mt-0.5">
                         Total points · {staffList.length} staff
                     </p>
@@ -215,24 +215,24 @@ export default function PerformancePage() {
                 {/* Header */}
                 <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                     <div>
-                        <h2 className="text-3xl font-bold text-slate-900 tracking-tight">Staff Performance Board</h2>
-                        <p className="text-slate-500 mt-1">
+                        <h2 className="text-3xl font-bold text-slate-900 dark:text-white tracking-tight">Staff Performance Board</h2>
+                        <p className="text-slate-500 dark:text-slate-400 mt-1">
                             Weighted performance scoring based on clinical impact.
                         </p>
                     </div>
                     
                     <div className="flex items-center gap-3">
                         {/* Period Selector */}
-                        <div className="bg-slate-100 p-1 rounded-xl flex gap-1">
+                        <div className="bg-slate-100 dark:bg-slate-800 p-1 rounded-xl flex gap-1">
                             <button
                                 onClick={() => setTimePeriod("ALL")}
-                                className={`px-4 py-1.5 text-xs font-bold rounded-lg transition-all ${timePeriod === "ALL" ? "bg-white text-slate-900 shadow-sm" : "text-slate-500 hover:text-slate-700"}`}
+                                className={`px-4 py-1.5 text-xs font-bold rounded-lg transition-all ${timePeriod === "ALL" ? "bg-white dark:bg-slate-950 text-slate-900 dark:text-white shadow-sm" : "text-slate-500 dark:text-slate-400 hover:text-slate-700"}`}
                             >
                                 All Time
                             </button>
                             <button
                                 onClick={() => setTimePeriod("MONTH")}
-                                className={`px-4 py-1.5 text-xs font-bold rounded-lg transition-all ${timePeriod === "MONTH" ? "bg-white text-slate-900 shadow-sm" : "text-slate-500 hover:text-slate-700"}`}
+                                className={`px-4 py-1.5 text-xs font-bold rounded-lg transition-all ${timePeriod === "MONTH" ? "bg-white dark:bg-slate-950 text-slate-900 dark:text-white shadow-sm" : "text-slate-500 dark:text-slate-400 hover:text-slate-700"}`}
                             >
                                 This Month
                             </button>
@@ -241,7 +241,7 @@ export default function PerformancePage() {
                         <button
                             onClick={fetchData}
                             disabled={isLoading}
-                            className="px-4 py-2 text-sm font-bold border border-slate-200 rounded-xl hover:bg-slate-50 transition-colors"
+                            className="px-4 py-2 text-sm font-bold border border-slate-200 dark:border-slate-700 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors dark:text-white"
                         >
                             {isLoading ? "Loading..." : "Refresh"}
                         </button>
@@ -302,7 +302,7 @@ export default function PerformancePage() {
                                             className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold border transition-all
                                                 ${activeRoleFilter === role
                                                     ? "bg-slate-900 text-white border-slate-900"
-                                                    : "bg-white text-slate-500 border-slate-200 hover:border-slate-400"
+                                                    : "bg-white dark:bg-slate-900 text-slate-500 dark:text-slate-400 border-slate-200 dark:border-slate-700 hover:border-slate-400"
                                                 }`}
                                         >
                                             {role === "ALL" ? <TrendingUp className="w-3 h-3" /> : cfg.icon}
@@ -343,7 +343,7 @@ export default function PerformancePage() {
                                     performanceData.map((staff, idx) => {
                                         const cfg = getRoleConfig(staff.role)
                                         return (
-                                            <div key={staff.id} className="flex items-center gap-3 p-3 rounded-xl border border-slate-50 bg-slate-50/40 hover:bg-slate-50 transition-colors">
+                                            <div key={staff.id} className="flex items-center gap-3 p-3 rounded-xl border border-slate-50 dark:border-slate-800 bg-slate-50/40 dark:bg-slate-900/40 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors">
                                                 {/* Rank */}
                                                 <div className="w-7 h-7 shrink-0 flex items-center justify-center rounded-full bg-white border border-slate-100 text-xs font-black text-slate-400">
                                                     {idx + 1}
@@ -355,7 +355,7 @@ export default function PerformancePage() {
                                                 {/* Name */}
                                                 <div className="flex-1 min-w-0">
                                                     <div className="flex items-center gap-2">
-                                                        <p className="font-bold text-slate-900 text-sm truncate">{staff.username}</p>
+                                                        <p className="font-bold text-slate-900 dark:text-white text-sm truncate">{staff.username}</p>
                                                         <div className="flex gap-1">
                                                             {staff.rewards?.map((reward: string) => (
                                                                 <span key={reward} className="px-1.5 py-0.5 rounded-md bg-amber-100 text-amber-700 text-[8px] font-black uppercase tracking-tighter flex items-center gap-1">
@@ -368,7 +368,7 @@ export default function PerformancePage() {
                                                 </div>
                                                 {/* Score */}
                                                 <div className="text-right shrink-0">
-                                                    <p className="text-xl font-black text-slate-900">{staff.performanceScore}</p>
+                                                    <p className="text-xl font-black text-slate-900 dark:text-white">{staff.performanceScore}</p>
                                                     <p className="text-[10px] font-bold text-slate-400 uppercase">Impact Score</p>
                                                 </div>
                                                 <div className="text-right shrink-0 px-4 border-l border-slate-100">

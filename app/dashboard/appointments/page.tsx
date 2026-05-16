@@ -79,15 +79,15 @@ export default function AppointmentsPage() {
             <div className="space-y-8">
                 <div className="flex justify-between items-center">
                     <div>
-                        <h2 className="text-3xl font-black text-slate-800 tracking-tight">Clinic Schedule</h2>
-                        <p className="text-slate-500 font-medium italic">Manage future patient bookings and doctor availability.</p>
+                        <h2 className="text-3xl font-black text-slate-800 dark:text-white tracking-tight">Clinic Schedule</h2>
+                        <p className="text-slate-500 dark:text-slate-400 font-medium italic">Manage future patient bookings and doctor availability.</p>
                     </div>
                     <div className="flex gap-4">
-                        <div className="bg-white p-2 rounded-2xl border border-slate-100 shadow-sm flex items-center gap-2">
+                        <div className="bg-white dark:bg-slate-950 p-2 rounded-2xl border border-slate-100 dark:border-slate-800 shadow-sm flex items-center gap-2">
                             <Calendar className="text-indigo-500 w-4 h-4 ml-2" />
                             <input
                                 type="date"
-                                className="border-none bg-transparent text-xs font-black outline-none"
+                                className="border-none bg-transparent text-xs font-black outline-none dark:text-white"
                                 value={selectedDate}
                                 onChange={(e) => setSelectedDate(e.target.value)}
                             />
@@ -109,26 +109,26 @@ export default function AppointmentsPage() {
                         <CardContent className="p-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                             <div className="space-y-1">
                                 <label className="text-[10px] font-black text-slate-400 uppercase">Patient Folder ID</label>
-                                <input className="w-full bg-slate-50 p-3 rounded-xl border-none outline-none font-bold text-sm" value={patientId} onChange={(e) => setPatientId(e.target.value)} />
+                                <input className="w-full bg-slate-50 dark:bg-slate-900 p-3 rounded-xl border-none outline-none font-bold text-sm dark:text-white" value={patientId} onChange={(e) => setPatientId(e.target.value)} />
                             </div>
                             <div className="space-y-1">
                                 <label className="text-[10px] font-black text-slate-400 uppercase">Doctor</label>
-                                <select className="w-full bg-slate-50 p-3 rounded-xl border-none outline-none font-bold text-sm" value={doctorId} onChange={(e) => setDoctorId(e.target.value)}>
+                                <select className="w-full bg-slate-50 dark:bg-slate-900 p-3 rounded-xl border-none outline-none font-bold text-sm dark:text-white" value={doctorId} onChange={(e) => setDoctorId(e.target.value)}>
                                     <option value="">Any Available Doctor</option>
                                     {doctors.map(d => <option key={d.id} value={d.id}>{d.username}</option>)}
                                 </select>
                             </div>
                             <div className="space-y-1">
                                 <label className="text-[10px] font-black text-slate-400 uppercase">Date</label>
-                                <input type="date" className="w-full bg-slate-50 p-3 rounded-xl border-none outline-none font-bold text-sm" value={appDate} onChange={(e) => setAppDate(e.target.value)} />
+                                <input type="date" className="w-full bg-slate-50 dark:bg-slate-900 p-3 rounded-xl border-none outline-none font-bold text-sm dark:text-white" value={appDate} onChange={(e) => setAppDate(e.target.value)} />
                             </div>
                             <div className="space-y-1">
                                 <label className="text-[10px] font-black text-slate-400 uppercase">Time</label>
-                                <input type="time" className="w-full bg-slate-50 p-3 rounded-xl border-none outline-none font-bold text-sm" value={appTime} onChange={(e) => setAppTime(e.target.value)} />
+                                <input type="time" className="w-full bg-slate-50 dark:bg-slate-900 p-3 rounded-xl border-none outline-none font-bold text-sm dark:text-white" value={appTime} onChange={(e) => setAppTime(e.target.value)} />
                             </div>
                             <div className="md:col-span-3 space-y-1">
                                 <label className="text-[10px] font-black text-slate-400 uppercase">Reason for Visit</label>
-                                <input className="w-full bg-slate-50 p-3 rounded-xl border-none outline-none font-bold text-sm" placeholder="Symptoms or purpose..." value={reason} onChange={(e) => setReason(e.target.value)} />
+                                <input className="w-full bg-slate-50 dark:bg-slate-900 p-3 rounded-xl border-none outline-none font-bold text-sm dark:text-white" placeholder="Symptoms or purpose..." value={reason} onChange={(e) => setReason(e.target.value)} />
                             </div>
                             <div className="flex items-end">
                                 <Button className="w-full bg-indigo-600 h-12 rounded-xl font-black text-white" disabled={isSaving} onClick={handleSchedule}>
@@ -149,17 +149,17 @@ export default function AppointmentsPage() {
                         </div>
                     ) : (
                         appointments.map((app) => (
-                            <Card key={app.id} className="rounded-[30px] border-none shadow-sm hover:shadow-md transition-all group overflow-hidden bg-white">
+                            <Card key={app.id} className="rounded-[30px] border-none shadow-sm hover:shadow-md transition-all group overflow-hidden bg-white dark:bg-slate-950">
                                 <div className="flex">
                                     <div className={`w-2 ${app.status === 'SCHEDULED' ? 'bg-indigo-500' : 'bg-emerald-500'}`}></div>
                                     <CardContent className="flex-1 p-6 flex flex-col md:flex-row items-center justify-between gap-6">
                                         <div className="flex items-center gap-6">
                                             <div className="h-16 w-16 bg-slate-50 rounded-[24px] flex flex-col items-center justify-center border border-slate-100">
                                                 <span className="text-[8px] font-black uppercase text-slate-400">Time</span>
-                                                <span className="text-sm font-black text-slate-900">{new Date(app.appointmentDate).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
+                                                <span className="text-sm font-black text-slate-900 dark:text-white">{new Date(app.appointmentDate).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
                                             </div>
                                             <div>
-                                                <h3 className="text-lg font-black text-slate-800">{app.patient.fullName}</h3>
+                                                <h3 className="text-lg font-black text-slate-800 dark:text-white">{app.patient.fullName}</h3>
                                                 <div className="flex items-center gap-3 mt-1">
                                                     <span className="text-[10px] font-bold text-slate-400">Dr. {app.doctor?.username || "Unassigned"}</span>
                                                     <span className="w-1 h-1 bg-slate-200 rounded-full"></span>

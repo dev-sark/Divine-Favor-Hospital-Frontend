@@ -199,7 +199,7 @@ export default function ConsultationPage() {
                                 {isLoading ? (
                                     <p className="text-center text-slate-400 text-sm py-4">Checking queue...</p>
                                 ) : queue.length === 0 ? (
-                                    <div className="text-center py-10 bg-slate-50 rounded-2xl border border-dashed">
+                                    <div className="text-center py-10 bg-slate-50 dark:bg-slate-900 rounded-2xl border border-dashed dark:border-slate-700">
                                         <p className="text-slate-400 text-xs italic">Queue is empty.</p>
                                     </div>
                                 ) : (
@@ -214,7 +214,7 @@ export default function ConsultationPage() {
                                                         ? "bg-red-50 border-red-200" 
                                                         : visit.priority === 'EMERGENCY'
                                                             ? "bg-amber-50 border-amber-200"
-                                                            : "bg-white border-slate-100 hover:border-slate-300"
+                                                            : "bg-white dark:bg-slate-950 border-slate-100 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700"
                                             }`}
                                         >
                                             <div className="flex items-start justify-between mb-2">
@@ -223,7 +223,7 @@ export default function ConsultationPage() {
                                                 </div>
                                             </div>
                                             <div>
-                                                <p className="text-sm font-bold text-slate-900 leading-tight mb-1">{visit.patient?.fullName}</p>
+                                                <p className="text-sm font-bold text-slate-900 dark:text-white leading-tight mb-1">{visit.patient?.fullName}</p>
                                                 <p className="text-[10px] text-slate-500 font-mono uppercase tracking-tighter">{visit.patient?.folderNumber}</p>
                                             </div>
                                         </div>
@@ -237,22 +237,22 @@ export default function ConsultationPage() {
                 <div className="lg:col-span-3 space-y-6">
                     {activePatient ? (
                         <div className="space-y-6">
-                            <div className="flex items-center justify-between bg-white p-6 rounded-3xl border border-slate-100 shadow-sm">
+                            <div className="flex items-center justify-between bg-white dark:bg-slate-950 p-6 rounded-3xl border border-slate-100 dark:border-slate-800 shadow-sm">
                                 <div className="flex items-center gap-5">
                                     <div className="h-14 w-14 bg-indigo-100 rounded-2xl flex items-center justify-center text-indigo-600 text-xl font-bold shadow-inner">
                                         {activePatient.fullName?.charAt(0)}
                                     </div>
                                     <div className="space-y-1">
-                                        <h2 className="text-2xl font-bold text-slate-900">{activePatient.fullName}</h2>
-                                        <p className="text-sm text-slate-500 font-medium">
-                                            Folder: <span className="text-slate-900 font-bold">{activePatient.folderNumber}</span> | {activePatient.gender}
+                                        <h2 className="text-2xl font-bold text-slate-900 dark:text-white">{activePatient.fullName}</h2>
+                                        <p className="text-sm text-slate-500 dark:text-slate-400 font-medium">
+                                            Folder: <span className="text-slate-900 dark:text-white font-bold">{activePatient.folderNumber}</span> | {activePatient.gender}
                                         </p>
                                     </div>
                                 </div>
-                                <div className="flex bg-slate-100 p-1 rounded-xl">
-                                    <button onClick={() => setActiveTab("current")} className={`px-4 py-2 rounded-lg text-[10px] font-black uppercase tracking-widest transition-all ${activeTab === 'current' ? "bg-white text-indigo-600 shadow-sm" : "text-slate-500"}`}>Consultation</button>
-                                    <button onClick={() => setActiveTab("timeline")} className={`px-4 py-2 rounded-lg text-[10px] font-black uppercase tracking-widest transition-all ${activeTab === 'timeline' ? "bg-white text-emerald-600 shadow-sm" : "text-slate-500"}`}>Handover Timeline</button>
-                                    <button onClick={() => setActiveTab("history")} className={`px-4 py-2 rounded-lg text-[10px] font-black uppercase tracking-widest transition-all ${activeTab === 'history' ? "bg-white text-indigo-600 shadow-sm" : "text-slate-500"}`}>History ({history.length})</button>
+                                <div className="flex bg-slate-100 dark:bg-slate-800 p-1 rounded-xl">
+                                    <button onClick={() => setActiveTab("current")} className={`px-4 py-2 rounded-lg text-[10px] font-black uppercase tracking-widest transition-all ${activeTab === 'current' ? "bg-white dark:bg-slate-950 text-indigo-600 shadow-sm" : "text-slate-500 dark:text-slate-400"}`}>Consultation</button>
+                                    <button onClick={() => setActiveTab("timeline")} className={`px-4 py-2 rounded-lg text-[10px] font-black uppercase tracking-widest transition-all ${activeTab === 'timeline' ? "bg-white dark:bg-slate-950 text-emerald-600 shadow-sm" : "text-slate-500 dark:text-slate-400"}`}>Handover Timeline</button>
+                                    <button onClick={() => setActiveTab("history")} className={`px-4 py-2 rounded-lg text-[10px] font-black uppercase tracking-widest transition-all ${activeTab === 'history' ? "bg-white dark:bg-slate-950 text-indigo-600 shadow-sm" : "text-slate-500 dark:text-slate-400"}`}>History ({history.length})</button>
                                 </div>
                             </div>
 
@@ -270,17 +270,17 @@ export default function ConsultationPage() {
                                             <div className="space-y-6">
                                                 <div className="space-y-3">
                                                     <label className="text-xs font-black text-slate-400 uppercase tracking-widest">Symptoms</label>
-                                                    <textarea value={symptoms} onChange={(e) => setSymptoms(e.target.value)} className="w-full h-32 rounded-2xl border-2 border-slate-100 p-4 text-sm" placeholder="Patient complaints..." />
+                                                    <textarea value={symptoms} onChange={(e) => setSymptoms(e.target.value)} className="w-full h-32 rounded-2xl border-2 border-slate-100 dark:border-slate-700 bg-white dark:bg-slate-900 p-4 text-sm dark:text-white" placeholder="Patient complaints..." />
                                                 </div>
-                                                <div className="space-y-3 p-5 bg-slate-50 rounded-2xl">
+                                                <div className="space-y-3 p-5 bg-slate-50 dark:bg-slate-900 rounded-2xl">
                                                     <div className="flex justify-between items-center">
                                                         <label className="text-xs font-black text-slate-500 uppercase tracking-widest">Lab/Radiology Order</label>
-                                                        <select value={labCategory} onChange={(e) => setLabCategory(e.target.value)} className="text-[10px] font-bold border-none bg-white p-1 rounded">
+                                                        <select value={labCategory} onChange={(e) => setLabCategory(e.target.value)} className="text-[10px] font-bold border-none bg-white dark:bg-slate-800 dark:text-white p-1 rounded">
                                                             <option value="LABORATORY">Lab</option>
                                                             <option value="RADIOLOGY">Radiology</option>
                                                         </select>
                                                     </div>
-                                                    <textarea value={labTests} onChange={(e) => setLabTests(e.target.value)} className="w-full h-20 bg-white border-none rounded-xl p-3 text-sm" placeholder="Tests..." />
+                                                    <textarea value={labTests} onChange={(e) => setLabTests(e.target.value)} className="w-full h-20 bg-white dark:bg-slate-800 border-none rounded-xl p-3 text-sm dark:text-white" placeholder="Tests..." />
                                                 </div>
                                             </div>
                                             <div className="space-y-6">
@@ -291,7 +291,7 @@ export default function ConsultationPage() {
                                                 </div>
                                                 <div className="space-y-3">
                                                     <label className="text-xs font-black text-slate-400 uppercase tracking-widest">Treatment Plan</label>
-                                                    <textarea value={treatmentPlan} onChange={(e) => setTreatmentPlan(e.target.value)} className="w-full h-32 rounded-2xl border-2 border-slate-100 p-4 text-sm" placeholder="Plan..." />
+                                                    <textarea value={treatmentPlan} onChange={(e) => setTreatmentPlan(e.target.value)} className="w-full h-32 rounded-2xl border-2 border-slate-100 dark:border-slate-700 bg-white dark:bg-slate-900 p-4 text-sm dark:text-white" placeholder="Plan..." />
                                                 </div>
                                             </div>
                                         </div>
@@ -326,7 +326,7 @@ export default function ConsultationPage() {
                                             </div>
                                             <div className="text-right">
                                                 <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Encounter Fee</p>
-                                                <p className="text-lg font-black text-slate-900">GH₵ {parseFloat(consultationFee).toFixed(2)}</p>
+                                                <p className="text-lg font-black text-slate-900 dark:text-white">GH₵ {parseFloat(consultationFee).toFixed(2)}</p>
                                             </div>
                                         </div>
                                     </div>
@@ -398,13 +398,13 @@ export default function ConsultationPage() {
                                     </CardFooter>
                                 </Card>
                             ) : activeTab === 'timeline' ? (
-                                <div className="p-10 bg-white rounded-[40px] border-2 border-emerald-50 min-h-[500px] shadow-sm">
+                                <div className="p-10 bg-white dark:bg-slate-950 rounded-[40px] border-2 border-emerald-50 dark:border-emerald-900 min-h-[500px] shadow-sm">
                                     <div className="flex items-center gap-3 mb-8">
                                         <div className="h-10 w-10 bg-emerald-100 rounded-2xl flex items-center justify-center text-emerald-600">
                                             <ClipboardList className="w-5 h-5" />
                                         </div>
                                         <div>
-                                            <h3 className="font-black text-slate-900 uppercase tracking-tighter">Visit Handover Timeline</h3>
+                                            <h3 className="font-black text-slate-900 dark:text-white uppercase tracking-tighter">Visit Handover Timeline</h3>
                                             <p className="text-[10px] text-slate-500 font-bold uppercase tracking-widest">Live Clinical Activity Feed</p>
                                         </div>
                                     </div>
@@ -425,11 +425,11 @@ export default function ConsultationPage() {
                                                                 {new Date(log.timestamp).toLocaleTimeString()}
                                                             </span>
                                                         </div>
-                                                        <p className="text-sm font-bold text-slate-800 leading-tight">
+                                                        <p className="text-sm font-bold text-slate-800 dark:text-slate-200 leading-tight">
                                                             {log.details}
                                                         </p>
                                                         <p className="text-[10px] text-slate-500 italic font-medium">
-                                                            Recorded by: <span className="text-slate-900 font-bold">{log.user?.username || 'System'}</span>
+                                                            Recorded by: <span className="text-slate-900 dark:text-white font-bold">{log.user?.username || 'System'}</span>
                                                         </p>
                                                     </div>
                                                 </div>
@@ -438,7 +438,7 @@ export default function ConsultationPage() {
                                     </div>
                                 </div>
                             ) : (
-                                <div className="p-8 bg-white rounded-3xl border min-h-[400px]">
+                                <div className="p-8 bg-white dark:bg-slate-950 rounded-3xl border dark:border-slate-800 min-h-[400px]">
                                     <h3 className="font-bold mb-4">Past Records</h3>
                                     <div className="space-y-4">
                                         {history.map(r => (
@@ -453,7 +453,7 @@ export default function ConsultationPage() {
                             )}
                         </div>
                     ) : (
-                        <div className="h-full flex items-center justify-center p-20 text-slate-300 italic font-bold border-2 border-dashed rounded-[40px]">
+                        <div className="h-full flex items-center justify-center p-20 text-slate-300 dark:text-slate-600 italic font-bold border-2 border-dashed dark:border-slate-700 rounded-[40px]">
                             Encounter focus mode: Select a patient from the queue.
                         </div>
                     )}

@@ -54,7 +54,7 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
                         <Logo />
                         <button 
                             onClick={() => setIsSidebarOpen(false)}
-                            className="p-2 text-slate-400 hover:text-slate-900 hover:bg-slate-100 rounded-2xl transition-all"
+                            className="p-2 text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 rounded-2xl transition-all"
                         >
                             <X size={20} />
                         </button>
@@ -146,7 +146,7 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
                         {!isSidebarOpen && (
                             <button 
                                 onClick={() => setIsSidebarOpen(true)}
-                                className="p-3 text-slate-600 hover:bg-slate-100 rounded-2xl transition-all"
+                                className="p-3 text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-2xl transition-all"
                             >
                                 <Menu size={24} />
                             </button>

@@ -39,8 +39,8 @@ export default function MyReportPage() {
             <div className="space-y-6">
                 <div className="flex justify-between items-center print:hidden">
                     <div>
-                        <h2 className="text-3xl font-black text-slate-800 tracking-tight">Personal Work Log</h2>
-                        <p className="text-slate-500 font-medium italic">Role-based accountability and activity tracking.</p>
+                        <h2 className="text-3xl font-black text-slate-800 dark:text-white tracking-tight">Personal Work Log</h2>
+                        <p className="text-slate-500 dark:text-slate-400 font-medium italic">Role-based accountability and activity tracking.</p>
                     </div>
                     <button 
                         onClick={() => window.print()}
@@ -51,7 +51,7 @@ export default function MyReportPage() {
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-4 gap-6 print:hidden">
-                    <Card className="md:col-span-1 rounded-[30px] border-slate-100 shadow-sm overflow-hidden bg-white">
+                    <Card className="md:col-span-1 rounded-[30px] border-slate-100 dark:border-slate-800 shadow-sm overflow-hidden bg-white dark:bg-slate-950">
                         <CardHeader className="bg-slate-50">
                             <CardTitle className="text-xs font-black uppercase tracking-widest flex items-center gap-2">
                                 <Calendar className="w-3 h-3 text-indigo-500" /> Date Range
@@ -62,7 +62,7 @@ export default function MyReportPage() {
                                 <label className="text-[10px] font-black text-slate-400 uppercase">From</label>
                                 <input 
                                     type="date" 
-                                    className="w-full bg-slate-50 border-none rounded-xl p-3 text-xs font-bold outline-none"
+                                    className="w-full bg-slate-50 dark:bg-slate-900 border-none rounded-xl p-3 text-xs font-bold outline-none dark:text-white"
                                     value={startDate}
                                     onChange={(e) => setStartDate(e.target.value)}
                                 />
@@ -71,7 +71,7 @@ export default function MyReportPage() {
                                 <label className="text-[10px] font-black text-slate-400 uppercase">To</label>
                                 <input 
                                     type="date" 
-                                    className="w-full bg-slate-50 border-none rounded-xl p-3 text-xs font-bold outline-none"
+                                    className="w-full bg-slate-50 dark:bg-slate-900 border-none rounded-xl p-3 text-xs font-bold outline-none dark:text-white"
                                     value={endDate}
                                     onChange={(e) => setEndDate(e.target.value)}
                                 />
@@ -79,14 +79,14 @@ export default function MyReportPage() {
                         </CardContent>
                     </Card>
 
-                    <Card className="md:col-span-3 rounded-[30px] border-indigo-50 shadow-xl overflow-hidden bg-white">
+                    <Card className="md:col-span-3 rounded-[30px] border-indigo-50 dark:border-indigo-900 shadow-xl overflow-hidden bg-white dark:bg-slate-950">
                         <CardHeader className="bg-indigo-50 p-6 flex flex-row justify-between items-center">
                             <div className="flex gap-4 items-center">
                                 <div className="h-12 w-12 bg-white rounded-2xl flex items-center justify-center shadow-inner">
                                     <Activity className="text-indigo-600" />
                                 </div>
                                 <div>
-                                    <CardTitle className="text-lg font-black text-slate-800 uppercase tracking-tighter">Activity Summary</CardTitle>
+                                    <CardTitle className="text-lg font-black text-slate-800 dark:text-white uppercase tracking-tighter">Activity Summary</CardTitle>
                                     <p className="text-[10px] font-bold text-slate-400 uppercase">Total Professional Actions Recorded</p>
                                 </div>
                             </div>
@@ -128,7 +128,7 @@ export default function MyReportPage() {
                                 <p className="text-slate-400 font-bold italic text-sm">No activity records found for this period.</p>
                             </div>
                         ) : (
-                            <div className="divide-y divide-slate-50">
+                            <div className="divide-y divide-slate-50 dark:divide-slate-800">
                                 {activities.map((log: any) => (
                                     <div key={log.id} className="p-6 hover:bg-slate-50/30 transition-all flex items-start justify-between group">
                                         <div className="space-y-2">
@@ -144,7 +144,7 @@ export default function MyReportPage() {
                                                     {new Date(log.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                                                 </span>
                                             </div>
-                                            <p className="text-sm font-black text-slate-800 leading-tight">
+                                            <p className="text-sm font-black text-slate-800 dark:text-white leading-tight">
                                                 {log.details}
                                             </p>
                                         </div>

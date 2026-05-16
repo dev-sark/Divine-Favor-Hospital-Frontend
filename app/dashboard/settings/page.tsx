@@ -74,13 +74,13 @@ export default function SettingsPage() {
             <div className="max-w-4xl mx-auto space-y-8 py-6">
                 <div className="flex justify-between items-end">
                     <div>
-                        <h2 className="text-3xl font-bold text-slate-900 tracking-tight">Account Settings</h2>
-                        <p className="text-slate-500">Manage your profile, security credentials, and preferences.</p>
+                        <h2 className="text-3xl font-bold text-slate-900 dark:text-white tracking-tight">Account Settings</h2>
+                        <p className="text-slate-500 dark:text-slate-400">Manage your profile, security credentials, and preferences.</p>
                     </div>
                 </div>
 
                 {/* Tabs Navigation */}
-                <div className="border-b border-slate-200">
+                <div className="border-b border-slate-200 dark:border-slate-700">
                     <nav className="-mb-px flex space-x-8" aria-label="Tabs">
                         <button
                             onClick={() => setActiveTab('password')}
@@ -88,7 +88,7 @@ export default function SettingsPage() {
                                 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm flex items-center gap-2 transition-colors
                                 ${activeTab === 'password'
                                     ? 'border-indigo-500 text-indigo-600'
-                                    : 'border-transparent text-slate-500 hover:text-slate-700 hover:border-slate-300'
+                                    : 'border-transparent text-slate-500 dark:text-slate-400 hover:text-slate-700 hover:border-slate-300'
                                 }
                             `}
                         >
@@ -187,7 +187,7 @@ export default function SettingsPage() {
                                         <History size={20} />
                                     </div>
                                     <div>
-                                        <CardTitle className="text-lg font-black text-slate-800">Clinical Audit Trail</CardTitle>
+                                        <CardTitle className="text-lg font-black text-slate-800 dark:text-white">Clinical Audit Trail</CardTitle>
                                         <CardDescription className="text-xs">Immutable log of clinical and dispensing actions.</CardDescription>
                                     </div>
                                 </div>

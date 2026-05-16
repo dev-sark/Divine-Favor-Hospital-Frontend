@@ -48,7 +48,7 @@ export function VitalsModal({ patient, isOpen, onClose, onSave }: VitalsModalPro
                 <CardHeader>
                     <CardTitle>Record Patient Vitals</CardTitle>
                     <CardDescription>
-                        Logging vitals for <span className="font-bold text-slate-900">{patient.fullName}</span>
+                        Logging vitals for <span className="font-bold text-slate-900 dark:text-white">{patient.fullName}</span>
                     </CardDescription>
                 </CardHeader>
                 <form onSubmit={handleSubmit}>
@@ -89,7 +89,7 @@ export function VitalsModal({ patient, isOpen, onClose, onSave }: VitalsModalPro
                             <div className="space-y-1.5">
                                 <label className="text-xs font-bold text-slate-500 uppercase">Encounter Priority</label>
                                 <select 
-                                    className="flex h-10 w-full rounded-md border border-slate-200 bg-white px-3 py-2 text-sm focus:ring-1 focus:ring-primary outline-none"
+                                    className="flex h-10 w-full rounded-md border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 px-3 py-2 text-sm focus:ring-1 focus:ring-primary outline-none dark:text-white"
                                     value={priority}
                                     onChange={(e) => setPriority(e.target.value)}
                                 >

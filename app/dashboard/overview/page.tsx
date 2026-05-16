@@ -29,8 +29,8 @@ export default function DashboardOverview() {
         <DashboardLayout>
             <div className="space-y-8">
                 <div>
-                    <h2 className="text-3xl font-bold text-slate-900 tracking-tight">Hospital Overview</h2>
-                    <p className="text-slate-500">Welcome to the Divine Favor Digital Portal. Here is your live summary.</p>
+                    <h2 className="text-3xl font-bold text-slate-900 dark:text-white tracking-tight">Hospital Overview</h2>
+                    <p className="text-slate-500 dark:text-slate-400">Welcome to the Divine Favor Digital Portal. Here is your live summary.</p>
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -97,7 +97,7 @@ export default function DashboardOverview() {
                                     <circle cx="18" cy="18" r="16" fill="transparent" stroke="#ea580c" strokeWidth="4" strokeDasharray="20 100" strokeDashoffset="-70" />
                                 </svg>
                                 <div className="absolute inset-0 flex items-center justify-center flex-col">
-                                    <span className="text-2xl font-bold text-slate-900">100%</span>
+                                    <span className="text-2xl font-bold text-slate-900 dark:text-white">100%</span>
                                     <span className="text-[8px] uppercase tracking-widest text-slate-400">Total Cases</span>
                                 </div>
                            </div>
@@ -134,11 +134,11 @@ function StatCard({ title, value, description, icon, color }: any) {
             <CardContent className="p-6">
                 <div className="flex items-center justify-between">
                     <div>
-                        <p className="text-sm font-bold text-slate-500 uppercase tracking-wider">{title}</p>
-                        <h3 className="text-4xl font-bold text-slate-900 mt-2">{value}</h3>
-                        <p className="text-xs text-slate-400 mt-2 font-medium">{description}</p>
+                        <p className="text-sm font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">{title}</p>
+                        <h3 className="text-4xl font-bold text-slate-900 dark:text-white mt-2">{value}</h3>
+                        <p className="text-xs text-slate-400 dark:text-slate-500 mt-2 font-medium">{description}</p>
                     </div>
-                    <div className={`p-4 rounded-2xl ${color}`}>
+                    <div className={`p-4 rounded-2xl ${color} dark:bg-opacity-20`}>
                         {icon}
                     </div>
                 </div>
@@ -151,10 +151,10 @@ function QuickAction({ title, href, icon }: any) {
     return (
         <a
             href={href}
-            className="flex items-center gap-4 p-4 rounded-2xl border border-slate-100 bg-white hover:border-primary hover:shadow-lg hover:shadow-primary/5 transition-all group"
+            className="flex items-center gap-4 p-4 rounded-2xl border border-slate-100 dark:border-slate-800 bg-white dark:bg-slate-950 hover:border-primary hover:shadow-lg hover:shadow-primary/5 transition-all group"
         >
             <span className="text-2xl grayscale group-hover:grayscale-0 transition-all">{icon}</span>
-            <span className="font-bold text-slate-700 group-hover:text-primary">{title}</span>
+            <span className="font-bold text-slate-700 dark:text-slate-300 group-hover:text-primary">{title}</span>
         </a>
     )
 }
@@ -164,9 +164,9 @@ function LegendItem({ color, label, value }: any) {
         <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
                 <div className={`h-2.5 w-2.5 rounded-full ${color}`} />
-                <span className="text-xs font-bold text-slate-600 uppercase tracking-tighter">{label}</span>
+                <span className="text-xs font-bold text-slate-600 dark:text-slate-400 uppercase tracking-tighter">{label}</span>
             </div>
-            <span className="text-sm font-bold text-slate-900">{value}</span>
+            <span className="text-sm font-bold text-slate-900 dark:text-white">{value}</span>
         </div>
     )
 }

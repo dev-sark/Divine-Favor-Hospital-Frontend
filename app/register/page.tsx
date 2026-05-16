@@ -42,14 +42,14 @@ export default function RegisterStaffPage() {
     }
 
     return (
-        <div className="min-h-screen bg-slate-50 flex flex-col justify-center items-center p-4">
+        <div className="min-h-screen bg-slate-50 dark:bg-slate-950 flex flex-col justify-center items-center p-4">
             <div className="w-full max-w-md space-y-8">
                 <div className="text-center space-y-2">
                     <div className="bg-primary/10 w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-6">
                         <Stethoscope className="w-8 h-8 text-primary" />
                     </div>
-                    <h1 className="text-3xl font-bold text-slate-900 tracking-tight">Staff Registration</h1>
-                    <p className="text-slate-500">Apply for access to the clinical core network.</p>
+                    <h1 className="text-3xl font-bold text-slate-900 dark:text-white tracking-tight">Staff Registration</h1>
+                    <p className="text-slate-500 dark:text-slate-400">Apply for access to the clinical core network.</p>
                 </div>
 
                 <Card className="border-slate-200/60 shadow-xl shadow-slate-200/40">
@@ -62,7 +62,7 @@ export default function RegisterStaffPage() {
                             )}
 
                             <div className="space-y-1.5">
-                                <label className="text-sm font-bold text-slate-700">Username</label>
+                                <label className="text-sm font-bold text-slate-700 dark:text-slate-300">Username</label>
                                 <Input
                                     name="username"
                                     placeholder="e.g. dr_smith"
@@ -73,7 +73,7 @@ export default function RegisterStaffPage() {
                             </div>
 
                             <div className="space-y-1.5">
-                                <label className="text-sm font-bold text-slate-700">Password</label>
+                                <label className="text-sm font-bold text-slate-700 dark:text-slate-300">Password</label>
                                 <Input
                                     type="password"
                                     name="password"
@@ -85,12 +85,12 @@ export default function RegisterStaffPage() {
                             </div>
 
                             <div className="space-y-1.5">
-                                <label className="text-sm font-bold text-slate-700">Role</label>
+                                <label className="text-sm font-bold text-slate-700 dark:text-slate-300">Role</label>
                                 <select
                                     name="role"
                                     value={formData.role}
                                     onChange={handleChange}
-                                    className="flex h-11 w-full rounded-xl border border-border bg-background px-3 py-2 text-sm focus:ring-2 focus:ring-primary"
+                                    className="flex h-11 w-full rounded-xl border border-border bg-background px-3 py-2 text-sm focus:ring-2 focus:ring-primary dark:text-white"
                                 >
                                     <option value="DOCTOR">Doctor</option>
                                     <option value="NURSE">Nurse</option>

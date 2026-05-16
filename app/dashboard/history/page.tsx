@@ -76,8 +76,8 @@ export default function HistoryPage() {
             <div className="space-y-6">
                 <div className="flex items-center justify-between">
                     <div>
-                        <h2 className="text-2xl font-bold text-slate-900 tracking-tight">Patient Directory</h2>
-                        <p className="text-sm text-slate-500">View a complete list of all patients and their historical hospital visits.</p>
+                        <h2 className="text-2xl font-bold text-slate-900 dark:text-white tracking-tight">Patient Directory</h2>
+                        <p className="text-sm text-slate-500 dark:text-slate-400">View a complete list of all patients and their historical hospital visits.</p>
                     </div>
                     <Button size="sm" onClick={fetchPatients} disabled={isLoading} variant="outline" className="border-slate-200">
                         {isLoading ? "Refreshing..." : "Refresh Patients"}
@@ -94,7 +94,7 @@ export default function HistoryPage() {
                             <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-slate-400" />
                             <input
                                 placeholder="Search Name or Folder Number..."
-                                className="pl-9 flex h-9 w-full rounded-md border border-slate-200 bg-transparent px-3 py-1 text-sm shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-primary"
+                                className="pl-9 flex h-9 w-full rounded-md border border-slate-200 dark:border-slate-700 bg-transparent px-3 py-1 text-sm shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-primary dark:text-white"
                                 value={searchTerm}
                                 onChange={(e) => setSearchTerm(e.target.value)}
                             />
@@ -104,7 +104,7 @@ export default function HistoryPage() {
                         <div className="overflow-x-auto">
                             <table className="w-full text-left text-sm">
                                 <thead>
-                                    <tr className="border-b border-slate-100 text-slate-400 font-medium">
+                                    <tr className="border-b border-slate-100 dark:border-slate-800 text-slate-400 font-medium">
                                         <th className="pb-3 pl-2">Patient Name</th>
                                         <th className="pb-3">Folder #</th>
                                         <th className="pb-3">Phone</th>
@@ -112,7 +112,7 @@ export default function HistoryPage() {
                                         <th className="pb-3 text-right pr-2">Action</th>
                                     </tr>
                                 </thead>
-                                <tbody className="divide-y divide-slate-50">
+                                <tbody className="divide-y divide-slate-50 dark:divide-slate-800">
                                     {filteredPatients.length === 0 && !isLoading ? (
                                         <tr>
                                             <td colSpan={5} className="py-8 text-center text-slate-400 italic">No patients found in directory.</td>
@@ -120,8 +120,8 @@ export default function HistoryPage() {
                                     ) : (
                                         filteredPatients.map((patient) => (
                                             <React.Fragment key={patient.id}>
-                                                <tr className={`group transition-colors ${expandedPatient?.id === patient.id ? 'bg-slate-50' : 'hover:bg-slate-50/50'}`}>
-                                                    <td className="py-4 pl-2 font-bold text-slate-900">{patient.fullName}</td>
+                                                <tr className={`group transition-colors ${expandedPatient?.id === patient.id ? 'bg-slate-50 dark:bg-slate-800' : 'hover:bg-slate-50/50 dark:hover:bg-slate-800/50'}`}>
+                                                    <td className="py-4 pl-2 font-bold text-slate-900 dark:text-white">{patient.fullName}</td>
                                                     <td className="py-4 font-mono text-[10px] text-slate-500 uppercase">{patient.folderNumber}</td>
                                                     <td className="py-4 text-slate-500">{patient.telephone || 'N/A'}</td>
                                                     <td className="py-4 text-slate-500">{patient.dateOfBirth ? new Date(patient.dateOfBirth).getFullYear() : 'Unknown'}</td>
@@ -140,9 +140,9 @@ export default function HistoryPage() {
                                                 {expandedPatient?.id === patient.id && (
                                                     <tr>
                                                         <td colSpan={5} className="p-0 border-b border-slate-100">
-                                                            <div className="bg-slate-50 p-6 shadow-inner border-l-4 border-l-primary flex flex-col lg:flex-row gap-6">
+                                                            <div className="bg-slate-50 dark:bg-slate-900 p-6 shadow-inner border-l-4 border-l-primary flex flex-col lg:flex-row gap-6">
                                                                 <div className="flex-1">
-                                                                    <h4 className="font-bold text-slate-800 mb-4 text-sm flex items-center gap-2 uppercase tracking-wide">
+                                                                    <h4 className="font-bold text-slate-800 dark:text-white mb-4 text-sm flex items-center gap-2 uppercase tracking-wide">
                                                                         <Calendar className="w-4 h-4 text-primary" /> Encounter History for {patient.fullName}
                                                                     </h4>
                                                                     {isLoadingHistory ? (
@@ -152,7 +152,7 @@ export default function HistoryPage() {
                                                                     ) : (
                                                                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                                                             {activeHistory.map((visit: any, index: number) => (
-                                                                                <div key={index} className="bg-white p-4 rounded-xl border border-slate-200 shadow-sm relative hover:border-primary transition-colors">
+                                                                                <div key={index} className="bg-white dark:bg-slate-950 p-4 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm relative hover:border-primary transition-colors">
                                                                                     <div className="absolute top-4 right-4 h-2 w-2 bg-teal-400 rounded-full"></div>
                                                                                     <p className="text-[10px] uppercase tracking-widest text-slate-400 font-bold mb-2">
                                                                                         {new Date(visit.visitDate).toLocaleDateString(undefined, { dateStyle: 'long' })}
@@ -194,8 +194,8 @@ export default function HistoryPage() {
                                                                 </div>
 
                                                                 <div className="w-full lg:w-96 space-y-4">
-                                                                    <div className="bg-white p-5 rounded-2xl shadow-sm border border-slate-200">
-                                                                        <h4 className="font-bold text-slate-800 mb-4 text-sm flex items-center gap-2">
+                                                                    <div className="bg-white dark:bg-slate-950 p-5 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700">
+                                                                        <h4 className="font-bold text-slate-800 dark:text-white mb-4 text-sm flex items-center gap-2">
                                                                             <Activity className="w-4 h-4 text-primary" /> Log New Visit (Triage)
                                                                         </h4>
                                                                         <form className="space-y-4" onSubmit={async (e) => {
@@ -235,8 +235,8 @@ export default function HistoryPage() {
                                                                         </form>
                                                                     </div>
 
-                                                                    <div className="bg-white p-5 rounded-2xl shadow-sm border border-slate-200">
-                                                                        <h4 className="font-bold text-slate-800 mb-4 text-xs flex items-center gap-2 grayscale hover:grayscale-0 transition-all cursor-default">
+                                                                    <div className="bg-white dark:bg-slate-950 p-5 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700">
+                                                                        <h4 className="font-bold text-slate-800 dark:text-white mb-4 text-xs flex items-center gap-2 grayscale hover:grayscale-0 transition-all cursor-default">
                                                                             <User className="w-4 h-4 text-slate-400" /> Edit Demographics
                                                                         </h4>
                                                                         <div className="space-y-3">

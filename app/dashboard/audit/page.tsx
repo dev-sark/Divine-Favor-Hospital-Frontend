@@ -115,11 +115,11 @@ export default function AuditLogPage() {
                 {/* Header */}
                 <div className="flex items-center justify-between">
                     <div>
-                        <h2 className="text-2xl font-bold text-slate-900 tracking-tight flex items-center gap-2">
+                        <h2 className="text-2xl font-bold text-slate-900 dark:text-white tracking-tight flex items-center gap-2">
                             <ShieldAlert className="w-6 h-6 text-primary" />
                             System Audit Log
                         </h2>
-                        <p className="text-sm text-slate-500 mt-0.5">
+                        <p className="text-sm text-slate-500 dark:text-slate-400 mt-0.5">
                             Full history of every staff action recorded in the system.
                         </p>
                     </div>
@@ -155,7 +155,7 @@ export default function AuditLogPage() {
                             value={search}
                             onChange={(e) => setSearch(e.target.value)}
                             placeholder="Search by staff name, patient name, or folder number..."
-                            className="w-full pl-9 pr-4 py-2 text-sm border border-slate-200 rounded-xl bg-white focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition-all"
+                            className="w-full pl-9 pr-4 py-2 text-sm border border-slate-200 dark:border-slate-700 rounded-xl bg-white dark:bg-slate-900 focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition-all dark:text-white"
                         />
                         {search && (
                             <button
@@ -176,7 +176,7 @@ export default function AuditLogPage() {
                                 className={`px-3 py-1.5 rounded-lg text-xs font-bold uppercase tracking-wider transition-all border
                                     ${filter === action
                                         ? "bg-slate-900 text-white border-slate-900"
-                                        : "bg-white text-slate-500 border-slate-200 hover:border-slate-400 hover:text-slate-800"
+                                        : "bg-white dark:bg-slate-900 text-slate-500 dark:text-slate-400 border-slate-200 dark:border-slate-700 hover:border-slate-400 hover:text-slate-800"
                                     }`}
                             >
                                 {action === "ALL" ? "All Events" : (ACTION_LABELS[action] || action)}
@@ -197,7 +197,7 @@ export default function AuditLogPage() {
                         <div className="overflow-x-auto">
                             <table className="w-full text-left text-sm">
                                 <thead>
-                                    <tr className="border-b border-slate-100 text-slate-400 font-medium text-xs uppercase tracking-wider">
+                                    <tr className="border-b border-slate-100 dark:border-slate-800 text-slate-400 font-medium text-xs uppercase tracking-wider">
                                         <th className="pb-3 pl-2">
                                             <span className="flex items-center gap-1"><User className="w-3 h-3" /> Staff</span>
                                         </th>
@@ -213,7 +213,7 @@ export default function AuditLogPage() {
                                         </th>
                                     </tr>
                                 </thead>
-                                <tbody className="divide-y divide-slate-50">
+                                <tbody className="divide-y divide-slate-50 dark:divide-slate-800">
                                     {isLoading ? (
                                         <tr>
                                             <td colSpan={5} className="py-12 text-center text-slate-400 italic">
@@ -236,7 +236,7 @@ export default function AuditLogPage() {
                                                             {log.user?.username?.charAt(0) ?? "?"}
                                                         </div>
                                                         <div>
-                                                            <p className="font-bold text-slate-900 text-sm">
+                                                            <p className="font-bold text-slate-900 dark:text-white text-sm">
                                                                 {log.user?.username ?? "System"}
                                                             </p>
                                                             <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">
@@ -291,7 +291,7 @@ function StatCard({ label, value, color }: { label: string; value: number; color
             <div className="flex items-center gap-3">
                 <div className={`w-2 h-10 rounded-full ${color}`} />
                 <div>
-                    <p className="text-2xl font-black text-slate-900">{value}</p>
+                    <p className="text-2xl font-black text-slate-900 dark:text-white">{value}</p>
                     <p className="text-xs font-bold text-slate-400 uppercase tracking-wider">{label}</p>
                 </div>
             </div>

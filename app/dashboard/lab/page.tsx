@@ -58,10 +58,10 @@ export default function LaboratoryPage() {
             <div className="space-y-6">
                 <div className="flex justify-between items-center">
                     <div>
-                        <h2 className="text-3xl font-bold text-slate-900 tracking-tight">Laboratory Dashboard</h2>
-                        <p className="text-slate-500 mt-1">Manage pending lab requests and record results.</p>
+                        <h2 className="text-3xl font-bold text-slate-900 dark:text-white tracking-tight">Laboratory Dashboard</h2>
+                        <p className="text-slate-500 dark:text-slate-400 mt-1">Manage pending lab requests and record results.</p>
                     </div>
-                    <div className="flex items-center gap-4 bg-white p-2 rounded-2xl shadow-sm border border-slate-100">
+                    <div className="flex items-center gap-4 bg-white dark:bg-slate-950 p-2 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-800">
                         <div className="flex items-center gap-2 px-3 py-1 bg-amber-50 rounded-xl text-amber-700 font-bold text-sm">
                             <Clock className="w-4 h-4" /> {pendingOrders.length} Pending
                         </div>
@@ -77,7 +77,7 @@ export default function LaboratoryPage() {
                                 <input
                                     type="text"
                                     placeholder="Search by patient name or folder number..."
-                                    className="w-full pl-10 pr-4 py-2 bg-slate-50 border-none rounded-xl focus:ring-2 focus:ring-primary/20 transition-all text-sm"
+                                    className="w-full pl-10 pr-4 py-2 bg-slate-50 dark:bg-slate-900 border-none rounded-xl focus:ring-2 focus:ring-primary/20 transition-all text-sm dark:text-white"
                                     value={searchTerm}
                                     onChange={(e) => setSearchTerm(e.target.value)}
                                 />
@@ -106,7 +106,7 @@ export default function LaboratoryPage() {
                                                     {order.patient?.fullName?.charAt(0)}
                                                 </div>
                                                 <div>
-                                                    <p className="font-bold text-slate-900">{order.patient?.fullName}</p>
+                                                    <p className="font-bold text-slate-900 dark:text-white">{order.patient?.fullName}</p>
                                                     <p className="text-xs text-slate-500 font-medium">{order.patient?.folderNumber} · {order.category}</p>
                                                 </div>
                                             </div>
@@ -136,7 +136,7 @@ export default function LaboratoryPage() {
                                         <div className="flex items-center gap-2 text-xs font-bold text-slate-500">
                                             <User className="w-3.5 h-3.5" /> PATIENT DETAILS
                                         </div>
-                                        <p className="font-black text-slate-900">{selectedOrder.patient?.fullName}</p>
+                                        <p className="font-black text-slate-900 dark:text-white">{selectedOrder.patient?.fullName}</p>
                                         <div className="flex items-center gap-2 text-xs font-bold text-slate-500 pt-2 border-t border-slate-200">
                                             <FlaskConical className="w-3.5 h-3.5" /> TESTS REQUESTED
                                         </div>
@@ -147,7 +147,7 @@ export default function LaboratoryPage() {
                                         <label className="text-xs font-black text-slate-400 uppercase tracking-widest">Findings & Results</label>
                                         <textarea
                                             rows={6}
-                                            className="w-full p-4 bg-slate-50 border-none rounded-2xl focus:ring-2 focus:ring-primary/20 transition-all text-sm font-medium"
+                                            className="w-full p-4 bg-slate-50 dark:bg-slate-900 border-none rounded-2xl focus:ring-2 focus:ring-primary/20 transition-all text-sm font-medium dark:text-white"
                                             placeholder="Enter test findings here..."
                                             value={results}
                                             onChange={(e) => setResults(e.target.value)}

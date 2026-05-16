@@ -89,8 +89,8 @@ export default function StaffManagementPage() {
             <div className="space-y-6 flex flex-col">
                 <div className="flex items-center justify-between">
                     <div>
-                        <h2 className="text-2xl font-bold text-slate-900 tracking-tight">Staff Management</h2>
-                        <p className="text-sm text-slate-500">Approve new staff registrations or revoke access.</p>
+                        <h2 className="text-2xl font-bold text-slate-900 dark:text-white tracking-tight">Staff Management</h2>
+                        <p className="text-sm text-slate-500 dark:text-slate-400">Approve new staff registrations or revoke access.</p>
                     </div>
                     <div className="flex gap-2">
                         <Button
@@ -131,9 +131,9 @@ export default function StaffManagementPage() {
                                     required
                                 />
                                 <div className="space-y-1.5">
-                                    <label className="text-sm font-medium text-slate-700">System Role</label>
+                                    <label className="text-sm font-medium text-slate-700 dark:text-slate-300">System Role</label>
                                     <select
-                                        className="flex h-11 w-full rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm focus:ring-2 focus:ring-primary outline-none"
+                                        className="flex h-11 w-full rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 px-3 py-2 text-sm focus:ring-2 focus:ring-primary outline-none dark:text-white"
                                         value={newStaff.role}
                                         onChange={(e) => setNewStaff({ ...newStaff, role: e.target.value })}
                                     >
@@ -164,22 +164,22 @@ export default function StaffManagementPage() {
                         <div className="overflow-x-auto">
                             <table className="w-full text-left text-sm">
                                 <thead>
-                                    <tr className="border-b border-slate-100 text-slate-400 font-medium">
+                                    <tr className="border-b border-slate-100 dark:border-slate-800 text-slate-400 font-medium">
                                         <th className="pb-3 pl-2">Username</th>
                                         <th className="pb-3">Role</th>
                                         <th className="pb-3">Status</th>
                                         <th className="pb-3 text-right pr-2">Actions</th>
                                     </tr>
                                 </thead>
-                                <tbody className="divide-y divide-slate-50">
+                                <tbody className="divide-y divide-slate-50 dark:divide-slate-800">
                                     {staff.length === 0 ? (
                                         <tr>
                                             <td colSpan={4} className="py-8 text-center text-slate-400 italic">No staff found.</td>
                                         </tr>
                                     ) : (
                                         staff.map((user) => (
-                                            <tr key={user.id} className="group hover:bg-slate-50/50 transition-colors">
-                                                <td className="py-4 pl-2 font-bold text-slate-900">{user.username}</td>
+                                            <tr key={user.id} className="group hover:bg-slate-50/50 dark:hover:bg-slate-800/50 transition-colors">
+                                                <td className="py-4 pl-2 font-bold text-slate-900 dark:text-white">{user.username}</td>
                                                 <td className="py-4">
                                                     <select 
                                                         className="bg-transparent border-none p-0 text-[10px] uppercase font-bold text-slate-500 focus:ring-0 cursor-pointer hover:text-primary transition-colors"

@@ -83,8 +83,8 @@ export default function QueuePage() {
             <div className="space-y-6">
                 <div className="flex items-center justify-between">
                     <div>
-                        <h2 className="text-2xl font-bold text-slate-900 tracking-tight">Patient Directory (Triage)</h2>
-                        <p className="text-sm text-slate-500">Select arriving patients and log their vitals to generate a visit.</p>
+                        <h2 className="text-2xl font-bold text-slate-900 dark:text-white tracking-tight">Patient Directory (Triage)</h2>
+                        <p className="text-sm text-slate-500 dark:text-slate-400">Select arriving patients and log their vitals to generate a visit.</p>
                     </div>
                     <Button size="sm" variant="outline" onClick={fetchPatients} disabled={isLoading}>
                         {isLoading ? "Refreshing..." : "Refresh Patients"}
@@ -101,7 +101,7 @@ export default function QueuePage() {
                             <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-slate-400" />
                             <input
                                 placeholder="Search by name or folder..."
-                                className="pl-9 flex h-9 w-full rounded-md border border-slate-200 bg-transparent px-3 py-1 text-sm shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-slate-950"
+                                className="pl-9 flex h-9 w-full rounded-md border border-slate-200 dark:border-slate-700 bg-transparent px-3 py-1 text-sm shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-slate-950 dark:focus-visible:ring-slate-400 dark:text-white"
                                 value={searchTerm}
                                 onChange={(e) => setSearchTerm(e.target.value)}
                             />
@@ -111,24 +111,24 @@ export default function QueuePage() {
                         <div className="overflow-x-auto">
                             <table className="w-full text-left text-sm">
                                 <thead>
-                                    <tr className="border-b border-slate-100 text-slate-400 font-medium">
+                                    <tr className="border-b border-slate-100 dark:border-slate-800 text-slate-400 font-medium">
                                         <th className="pb-3 pl-2">Patient Name</th>
                                         <th className="pb-3">Folder #</th>
                                         <th className="pb-3">Phone</th>
                                         <th className="pb-3 text-right pr-2">Action</th>
                                     </tr>
                                 </thead>
-                                <tbody className="divide-y divide-slate-50">
+                                <tbody className="divide-y divide-slate-50 dark:divide-slate-800">
                                     {filteredPatients.length === 0 ? (
                                         <tr>
                                             <td colSpan={4} className="py-8 text-center text-slate-400 italic">No patients found.</td>
                                         </tr>
                                     ) : (
                                         filteredPatients.map((patient) => (
-                                            <tr key={patient.id} className="group hover:bg-slate-50/50 transition-colors">
-                                                <td className="py-4 pl-2 font-medium text-slate-900">{patient.fullName}</td>
-                                                <td className="py-4 text-slate-500 font-mono text-xs">{patient.folderNumber}</td>
-                                                <td className="py-4 text-slate-500">{patient.telephone || 'N/A'}</td>
+                                            <tr key={patient.id} className="group hover:bg-slate-50/50 dark:hover:bg-slate-800/50 transition-colors">
+                                                <td className="py-4 pl-2 font-medium text-slate-900 dark:text-white">{patient.fullName}</td>
+                                                <td className="py-4 text-slate-500 dark:text-slate-400 font-mono text-xs">{patient.folderNumber}</td>
+                                                <td className="py-4 text-slate-500 dark:text-slate-400">{patient.telephone || 'N/A'}</td>
                                                 <td className="py-4 text-right pr-2">
                                                     <Button
                                                         variant="ghost"

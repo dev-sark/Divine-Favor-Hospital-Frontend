@@ -57,10 +57,10 @@ export default function BillingPage() {
             <div className="space-y-6">
                 <div className="flex justify-between items-center">
                     <div>
-                        <h2 className="text-3xl font-bold text-slate-900 tracking-tight">Accounts & Billing</h2>
-                        <p className="text-slate-500 mt-1">Manage patient invoices and process payments.</p>
+                        <h2 className="text-3xl font-bold text-slate-900 dark:text-white tracking-tight">Accounts & Billing</h2>
+                        <p className="text-slate-500 dark:text-slate-400 mt-1">Manage patient invoices and process payments.</p>
                     </div>
-                    <div className="flex items-center gap-4 bg-white p-2 rounded-2xl shadow-sm border border-slate-100">
+                    <div className="flex items-center gap-4 bg-white dark:bg-slate-950 p-2 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-800">
                         <div className="flex items-center gap-2 px-3 py-1 bg-green-50 rounded-xl text-green-700 font-bold text-sm">
                             <Banknote className="w-4 h-4" /> Unpaid Items: {unpaidBills.length}
                         </div>
@@ -76,7 +76,7 @@ export default function BillingPage() {
                                 <input
                                     type="text"
                                     placeholder="Search bills by patient name or folder..."
-                                    className="w-full pl-10 pr-4 py-3 bg-slate-50 border-none rounded-2xl focus:ring-2 focus:ring-primary/20 transition-all text-sm"
+                                    className="w-full pl-10 pr-4 py-3 bg-slate-50 dark:bg-slate-900 border-none rounded-2xl focus:ring-2 focus:ring-primary/20 transition-all text-sm dark:text-white"
                                     value={searchTerm}
                                     onChange={(e) => setSearchTerm(e.target.value)}
                                 />
@@ -106,7 +106,7 @@ export default function BillingPage() {
                                                     <span className="font-black text-sm">{Math.floor(bill.totalAmount)}</span>
                                                 </div>
                                                 <div>
-                                                    <p className="font-black text-slate-900">{bill.patient?.fullName}</p>
+                                                    <p className="font-black text-slate-900 dark:text-white">{bill.patient?.fullName}</p>
                                                     <p className="text-xs text-slate-500 font-bold uppercase tracking-wider">{bill.patient?.folderNumber}</p>
                                                 </div>
                                             </div>
@@ -153,7 +153,7 @@ export default function BillingPage() {
                                         <div className="grid grid-cols-2 gap-4 print:grid-cols-2">
                                             <div>
                                                 <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1">Patient Encounter</p>
-                                                <p className="text-sm font-black text-slate-900">{selectedBill.patient?.fullName}</p>
+                                                <p className="text-sm font-black text-slate-900 dark:text-white">{selectedBill.patient?.fullName}</p>
                                                 <p className="text-[10px] font-bold text-slate-500 uppercase tracking-tighter">{selectedBill.patient?.folderNumber}</p>
                                             </div>
                                             <div className="text-right">
@@ -190,15 +190,15 @@ export default function BillingPage() {
                                             <div className="space-y-4">
                                                 <div className="flex justify-between items-center text-sm">
                                                     <span className="font-bold text-slate-600">Consultation Services</span>
-                                                    <span className="font-black text-slate-900">GH₵ {(selectedBill.consultationFee || 0).toFixed(2)}</span>
+                                                    <span className="font-black text-slate-900 dark:text-white">GH₵ {(selectedBill.consultationFee || 0).toFixed(2)}</span>
                                                 </div>
                                                 <div className="flex justify-between items-center text-sm">
-                                                    <span className="font-bold text-slate-600">Laboratory & Radiology</span>
-                                                    <span className="font-black text-slate-900">GH₵ {(selectedBill.labFee || 0).toFixed(2)}</span>
+                                                    <span className="font-bold text-slate-600 dark:text-slate-400">Laboratory & Radiology</span>
+                                                    <span className="font-black text-slate-900 dark:text-white">GH₵ {(selectedBill.labFee || 0).toFixed(2)}</span>
                                                 </div>
                                                 <div className="flex justify-between items-center text-sm">
-                                                    <span className="font-bold text-slate-600">Pharmacy & Medications</span>
-                                                    <span className="font-black text-slate-900">GH₵ {(selectedBill.pharmacyFee || 0).toFixed(2)}</span>
+                                                    <span className="font-bold text-slate-600 dark:text-slate-400">Pharmacy & Medications</span>
+                                                    <span className="font-black text-slate-900 dark:text-white">GH₵ {(selectedBill.pharmacyFee || 0).toFixed(2)}</span>
                                                 </div>
                                             </div>
                                         </div>

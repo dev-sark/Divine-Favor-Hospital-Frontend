@@ -108,18 +108,18 @@ export default function PharmacyPage() {
             <div className="space-y-6">
                 <div className="flex justify-between items-center">
                     <div>
-                        <h2 className="text-2xl font-bold text-slate-900 tracking-tight">Pharmacy Portal</h2>
-                        <p className="text-sm text-slate-500">Professional Medication Dispensing & Financial Integration.</p>
+                        <h2 className="text-2xl font-bold text-slate-900 dark:text-white tracking-tight">Pharmacy Portal</h2>
+                        <p className="text-sm text-slate-500 dark:text-slate-400">Professional Medication Dispensing & Financial Integration.</p>
                     </div>
-                    <Button variant="outline" onClick={fetchData} className="flex gap-2 bg-indigo-50 border-indigo-100 text-indigo-700 hover:bg-indigo-100">
+                    <Button variant="outline" onClick={fetchData} className="flex gap-2 bg-indigo-50 dark:bg-indigo-950 border-indigo-100 dark:border-indigo-900 text-indigo-700 dark:text-indigo-300 hover:bg-indigo-100 dark:hover:bg-indigo-900">
                         <RefreshCcw className={`w-4 h-4 ${isLoading ? 'animate-spin' : ''}`} />
                         Sync Pharmacy Queue
                     </Button>
                 </div>
 
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                    <Card className="lg:col-span-1 border-slate-100 shadow-sm rounded-3xl overflow-hidden">
-                        <CardHeader className="bg-slate-50/50">
+                    <Card className="lg:col-span-1 border-slate-100 dark:border-slate-800 shadow-sm rounded-3xl overflow-hidden">
+                        <CardHeader className="bg-slate-50/50 dark:bg-slate-900/50">
                             <CardTitle className="text-sm font-bold flex items-center gap-2">
                                 <ClipboardList className="w-4 h-4 text-indigo-500" />
                                 Prescriptions Waiting
@@ -127,7 +127,7 @@ export default function PharmacyPage() {
                             <div className="relative mt-2">
                                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-slate-400" />
                                 <input 
-                                    className="pl-9 flex h-10 w-full rounded-xl border border-slate-200 bg-white px-3 py-1 text-xs shadow-sm focus:ring-2 focus:ring-indigo-500 outline-none transition-all" 
+                                    className="pl-9 flex h-10 w-full rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 dark:text-white px-3 py-1 text-xs shadow-sm focus:ring-2 focus:ring-indigo-500 outline-none transition-all" 
                                     placeholder="Search patient or folder..."
                                     value={searchTerm}
                                     onChange={(e) => setSearchTerm(e.target.value)}
@@ -138,7 +138,7 @@ export default function PharmacyPage() {
                             {isLoading ? (
                                 <p className="text-center text-slate-400 text-xs py-10 italic">Querying clinical records...</p>
                             ) : filteredVisits.length === 0 ? (
-                                <div className="text-center py-12 bg-slate-50/50 rounded-2xl border border-dashed border-slate-200">
+                                <div className="text-center py-12 bg-slate-50/50 dark:bg-slate-900/50 rounded-2xl border border-dashed border-slate-200 dark:border-slate-700">
                                     <p className="text-slate-400 text-xs italic font-medium">No prescriptions pending.</p>
                                     <p className="text-[10px] text-slate-300 mt-2 uppercase tracking-widest">Vault Secure</p>
                                 </div>
@@ -147,7 +147,7 @@ export default function PharmacyPage() {
                                     <div 
                                         key={v.id} 
                                         onClick={() => handleSelectRecord(v)}
-                                        className={`p-4 rounded-2xl border-2 cursor-pointer transition-all duration-200 relative group ${selectedRecord?.id === v.id ? "bg-indigo-50 border-indigo-400 shadow-md translate-x-1" : "bg-white border-slate-50 hover:border-slate-200"}`}
+                                        className={`p-4 rounded-2xl border-2 cursor-pointer transition-all duration-200 relative group ${selectedRecord?.id === v.id ? "bg-indigo-50 dark:bg-indigo-950 border-indigo-400 shadow-md translate-x-1" : "bg-white dark:bg-slate-950 border-slate-50 dark:border-slate-800 hover:border-slate-200 dark:hover:border-slate-700"}`}
                                     >
                                         <div className="flex items-center gap-4">
                                             <div className={`h-10 w-10 rounded-xl flex items-center justify-center text-sm font-bold shadow-sm transition-colors ${selectedRecord?.id === v.id ? 'bg-indigo-500 text-white' : 'bg-slate-100 text-slate-400 group-hover:bg-indigo-100 group-hover:text-indigo-500'}`}>
@@ -155,7 +155,7 @@ export default function PharmacyPage() {
                                             </div>
                                             <div className="flex-1 overflow-hidden">
                                                 <div className="flex items-center gap-2">
-                                                    <p className="text-sm font-bold text-slate-900 truncate">{v.patientName}</p>
+                                                    <p className="text-sm font-bold text-slate-900 dark:text-white truncate">{v.patientName}</p>
                                                     {v.paymentStatus === 'PAID' ? (
                                                         <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.5)]" title="Paid" />
                                                     ) : (
@@ -171,15 +171,15 @@ export default function PharmacyPage() {
                         </CardContent>
                     </Card>
 
-                    <Card className="lg:col-span-2 border-indigo-100 bg-white shadow-xl rounded-[40px] overflow-hidden min-h-[600px] border-2">
+                    <Card className="lg:col-span-2 border-indigo-100 dark:border-indigo-900 bg-white dark:bg-slate-950 shadow-xl rounded-[40px] overflow-hidden min-h-[600px] border-2">
                         {selectedRecord ? (
                             <div className="flex flex-col h-full">
-                                <CardHeader className="border-b border-indigo-50 p-8 flex flex-row items-center gap-6 bg-slate-50/30">
+                                <CardHeader className="border-b border-indigo-50 dark:border-indigo-900 p-8 flex flex-row items-center gap-6 bg-slate-50/30 dark:bg-slate-900/30">
                                     <div className="h-16 w-16 bg-indigo-600 rounded-3xl flex items-center justify-center text-white shadow-lg shadow-indigo-100">
                                         <Pill size={32} />
                                     </div>
                                     <div>
-                                        <CardTitle className="text-2xl font-black text-slate-900">{selectedRecord.patientName}</CardTitle>
+                                        <CardTitle className="text-2xl font-black text-slate-900 dark:text-white">{selectedRecord.patientName}</CardTitle>
                                         <CardDescription className="flex items-center gap-3 mt-1 font-medium italic">
                                             <span className="bg-indigo-100 text-indigo-700 px-2 py-0.5 rounded text-[10px] font-bold not-italic">PHYSICIAN ORDER</span>
                                             {selectedRecord.paymentStatus === 'PAID' ? (
@@ -226,7 +226,7 @@ export default function PharmacyPage() {
                                             <div className="absolute top-0 right-0 p-4 text-indigo-100">
                                                 <Pill size={48} className="opacity-10 rotate-12" />
                                             </div>
-                                            <p className="text-slate-800 whitespace-pre-wrap leading-relaxed font-bold text-lg italic relative z-10">
+                                            <p className="text-slate-800 dark:text-slate-200 whitespace-pre-wrap leading-relaxed font-bold text-lg italic relative z-10">
                                                 {selectedRecord.prescription}
                                             </p>
                                         </div>
@@ -235,7 +235,7 @@ export default function PharmacyPage() {
                                     <div className="space-y-3 pt-4">
                                         <label className="text-[10px] font-black text-emerald-600 uppercase tracking-[0.2em]">Pharmacist Dispensing Notes</label>
                                         <textarea 
-                                            className="w-full min-h-[100px] rounded-3xl border-2 border-emerald-50 bg-white p-5 text-sm focus:border-emerald-500 focus:bg-emerald-50/10 transition-all outline-none italic font-medium text-slate-700"
+                                            className="w-full min-h-[100px] rounded-3xl border-2 border-emerald-50 dark:border-emerald-900 bg-white dark:bg-slate-900 p-5 text-sm focus:border-emerald-500 focus:bg-emerald-50/10 transition-all outline-none italic font-medium text-slate-700 dark:text-slate-200"
                                             placeholder="Record actual quantities dispensed or specific advice..."
                                             value={dispensingNotes}
                                             onChange={(e) => setDispensingNotes(e.target.value)}
@@ -259,7 +259,7 @@ export default function PharmacyPage() {
                                     <Pill size={48} />
                                 </div>
                                 <div className="space-y-2">
-                                    <h3 className="text-2xl font-black text-slate-800">Pharmacy Queue Ready</h3>
+                                    <h3 className="text-2xl font-black text-slate-800 dark:text-white">Pharmacy Queue Ready</h3>
                                     <p className="text-sm text-slate-400 max-w-sm mx-auto leading-relaxed font-medium">
                                         Select a clinical case from the pendings queue to begin the medication dispensing and verification process.
                                     </p>

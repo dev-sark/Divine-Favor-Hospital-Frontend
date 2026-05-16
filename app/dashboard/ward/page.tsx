@@ -31,8 +31,8 @@ export default function WardDashboard() {
             <div className="space-y-8">
                 <div className="flex justify-between items-center">
                     <div>
-                        <h2 className="text-3xl font-black text-slate-800 tracking-tight">In-Patient Ward Management</h2>
-                        <p className="text-slate-500 font-medium italic">Monitor occupancy and manage hospital bed distribution.</p>
+                        <h2 className="text-3xl font-black text-slate-800 dark:text-white tracking-tight">In-Patient Ward Management</h2>
+                        <p className="text-slate-500 dark:text-slate-400 font-medium italic">Monitor occupancy and manage hospital bed distribution.</p>
                     </div>
                 </div>
 
@@ -41,7 +41,7 @@ export default function WardDashboard() {
                 ) : (
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                         {wards.map((ward) => (
-                            <Card key={ward.id} className="rounded-[40px] border-2 border-slate-50 shadow-xl overflow-hidden hover:shadow-2xl transition-all group">
+                            <Card key={ward.id} className="rounded-[40px] border-2 border-slate-50 dark:border-slate-800 shadow-xl overflow-hidden hover:shadow-2xl transition-all group">
                                 <CardHeader className="bg-gradient-to-br from-indigo-600 to-indigo-800 p-8 text-white">
                                     <div className="flex justify-between items-start">
                                         <div className="h-16 w-16 bg-white/20 rounded-3xl flex items-center justify-center backdrop-blur-md">
@@ -79,7 +79,7 @@ export default function WardDashboard() {
                                         ))}
                                     </div>
 
-                                    <div className="mt-8 flex justify-between items-center bg-slate-50 p-4 rounded-2xl border border-slate-100">
+                                    <div className="mt-8 flex justify-between items-center bg-slate-50 dark:bg-slate-900 p-4 rounded-2xl border border-slate-100 dark:border-slate-800">
                                         <div className="flex gap-4">
                                             <div className="text-center">
                                                 <p className="text-[10px] font-black text-slate-400 uppercase">Occupied</p>

@@ -21,17 +21,17 @@ export default function HomePage() {
             <Link href="#contact" className="hover:text-primary transition-colors">Contact</Link>
           </nav>
           <div className="flex items-center gap-4">
-            <button 
-                onClick={toggleTheme}
-                className="p-3 text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-2xl transition-all"
+            <button
+              onClick={toggleTheme}
+              className="p-3 text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-2xl transition-all"
             >
-                {isDarkMode ? <Sun size={20} /> : <Moon size={20} />}
+              {isDarkMode ? <Sun size={20} /> : <Moon size={20} />}
             </button>
             <Link
-                href="/login"
-                className="inline-flex h-10 items-center justify-center rounded-lg bg-primary px-6 text-sm font-semibold text-white shadow-sm hover:bg-primary/90 transition-colors"
+              href="/login"
+              className="inline-flex h-10 items-center justify-center rounded-lg bg-primary px-6 text-sm font-semibold text-white shadow-sm hover:bg-primary/90 transition-colors"
             >
-                Staff Portal
+              Staff Portal
             </Link>
           </div>
         </div>
